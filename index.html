@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحقق - The Detective</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="game-container">
+    <!-- Home Screen -->
+    <section id="screen-home" class="screen active">
+      <header class="screen-header">
+        <h1 data-i18n="appTitle">المحقق</h1>
+        <button id="btn-language" class="btn-lang" data-i18n="languageToggle">English</button>
+      </header>
+      <main class="screen-content">
+        <p data-i18n="tagline">لعبة تحقيق جنائي تفاعلية</p>
+        <div id="home-rank-card" class="detective-card hidden"></div>
+        <button id="btn-start-case" class="btn btn-primary" data-i18n="startCase">ابدأ القضية</button>
+        <button id="btn-continue" class="btn btn-secondary" data-i18n="continueGame" style="display:none;">متابعة</button>
+        <button id="btn-reset-case-home" class="btn btn-reset-case" data-i18n="resetCurrentCase" style="display:none;">إعادة القضية الحالية</button>
+        <button id="btn-new-profile" class="btn btn-secondary" data-i18n="newProfile">ملف جديد</button>
+      </main>
+    </section>
+
+    <!-- Detective Name Setup Screen -->
+    <section id="screen-playerName" class="screen hidden">
+      <header class="screen-header setup-screen-header">
+        <h2 data-i18n="profileSetupTitle">ملف المحقق</h2>
+        <button id="btn-name-back" class="btn-back setup-back" data-i18n="backHome">العودة للرئيسية</button>
+        <button class="btn-lang" data-i18n="languageToggle">English</button>
+      </header>
+      <main class="screen-content setup-content">
+        <p class="setup-step-label" data-i18n="setupStepName">الخطوة 1: اسم المحقق</p>
+        <p class="setup-intro" data-i18n="profileSetupIntro">اختر اسمك ثم صمم شكل المحقق.</p>
+        <label class="setup-label" for="input-detective-name" data-i18n="detectiveNameLabel">اسم المحقق</label>
+        <input
+          id="input-detective-name"
+          class="setup-input"
+          type="text"
+          maxlength="24"
+          autocomplete="off"
+          data-i18n-placeholder="detectiveNamePlaceholder"
+          placeholder="اكتب اسم المحقق..."
+        />
+        <p id="name-error" class="setup-error hidden" data-i18n="detectiveNameRequired">اكتب اسم المحقق أولاً.</p>
+        <button id="btn-name-next" class="btn btn-primary" data-i18n="nextStep">التالي</button>
+      </main>
+    </section>
+
+    <!-- Character Designer Screen -->
+    <section id="screen-characterDesign" class="screen hidden">
+      <header class="screen-header setup-screen-header">
+        <h2 data-i18n="characterDesignTitle">تصميم الشخصية</h2>
+        <button id="btn-design-home" class="btn-back setup-back" data-i18n="backHome">العودة للرئيسية</button>
+        <button class="btn-lang" data-i18n="languageToggle">English</button>
+      </header>
+      <main class="screen-content designer-content">
+        <p class="setup-step-label" data-i18n="setupStepDesign">الخطوة 2: تصميم الشخصية</p>
+        <div class="designer-layout">
+          <div class="designer-preview-wrap">
+            <div id="designer-preview" class="designer-preview" aria-hidden="true"></div>
+            <p id="designer-name" class="designer-name"></p>
+          </div>
+          <div id="designer-controls" class="designer-controls"></div>
+        </div>
+        <div class="designer-actions">
+          <button id="btn-designer-random" class="btn btn-secondary" data-i18n="randomCharacter">عشوائي</button>
+          <button id="btn-designer-confirm" class="btn btn-primary" data-i18n="confirmCharacter">تأكيد</button>
+        </div>
+        <button id="btn-designer-back" class="btn-back" data-i18n="previousStep">السابق</button>
+      </main>
+    </section>
+
+    <!-- Intro Screen -->
+    <section id="screen-intro" class="screen hidden">
+      <header class="screen-header">
+        <h2 data-i18n="caseTitle">القضية</h2>
+        <button id="btn-back-home" class="btn-back" data-i18n="backHome">العودة للرئيسية</button>
+      </header>
+      <main class="screen-content intro-content">
+        <h3 id="intro-case-title"></h3>
+        <p id="intro-text"></p>
+
+        <div class="victim-card">
+          <h4 data-i18n="victim">الضحية</h4>
+          <p><strong id="intro-victim-name"></strong> - <span id="intro-victim-desc"></span></p>
+          <p id="intro-victim-place"></p>
+          <p id="intro-victim-time"></p>
+        </div>
+
+        <div class="location-card">
+          <h4 data-i18n="location">مكان الجريمة</h4>
+          <p id="intro-location-name"></p>
+          <p id="intro-location-desc"></p>
+        </div>
+
+        <button id="btn-start-investigation" class="btn btn-primary" data-i18n="startInvestigation">ابدأ التحقيق</button>
+      </main>
+    </section>
+
+    <!-- Suspects Screen -->
+    <section id="screen-suspects" class="screen hidden">
+      <header class="screen-header">
+        <h2 data-i18n="suspects">المشتبه فيهم</h2>
+        <button id="btn-back-intro" class="btn-back" data-i18n="backHome">العودة</button>
+      </header>
+      <main class="screen-content suspects-content">
+        <div id="suspects-grid" class="suspects-grid"></div>
+        <div class="screen-actions">
+          <button id="btn-to-crime-scene" class="btn btn-primary" data-i18n="crimeScene">مشهد الجريمة</button>
+          <button id="btn-accuse" class="btn btn-danger" data-i18n="accuse">اتهام</button>
+        </div>
+      </main>
+    </section>
+
+    <!-- Accusation Screen -->
+    <section id="screen-accusation" class="screen hidden">
+      <header class="screen-header">
+        <h2 data-i18n="accusationTitle">اتهام المشتبه فيه</h2>
+        <button id="btn-accusation-back" class="btn-back" data-i18n="backToSuspects">العودة للمشتبه فيهم</button>
+      </header>
+      <main class="screen-content accusation-content">
+        <ol id="accusation-steps" class="accusation-steps"></ol>
+        <div id="accusation-body" class="accusation-body"></div>
+        <div class="accusation-nav">
+          <button id="btn-accusation-prev" class="btn btn-secondary" data-i18n="previousStep">السابق</button>
+          <button id="btn-accusation-next" class="btn btn-primary" data-i18n="nextStep">التالي</button>
+        </div>
+      </main>
+    </section>
+
+    <!-- Interrogation Screen -->
+    <section id="screen-interrogation" class="screen hidden">
+      <header class="screen-header">
+        <h2 data-i18n="interrogationTitle">استجواب المشتبه فيه</h2>
+        <button id="btn-back-to-suspects" class="btn-back" data-i18n="backToSuspects">العودة للمشتبه فيهم</button>
+      </header>
+      <main class="screen-content interrogation-content">
+        <div class="interrogation-profile">
+          <div id="interrogation-avatar" class="interrogation-avatar"></div>
+          <div class="interrogation-info">
+            <h3 id="interrogation-name"></h3>
+            <p id="interrogation-job"></p>
+            <div class="interrogation-tags">
+              <span id="interrogation-personality" class="interrogation-badge"></span>
+              <span id="interrogation-contradiction" class="contradiction-badge hidden" data-i18n="contradictionDetected">تم كشف تناقض</span>
+            </div>
+          </div>
+          <div class="suspect-meters">
+            <div class="meter-group">
+              <div class="meter-label">
+                <span data-i18n="cooperation">التعاون</span>
+                <span id="meter-cooperation-val" class="meter-val">50%</span>
+              </div>
+              <div class="meter-bar">
+                <div id="meter-cooperation-fill" class="meter-fill fill-cooperation" style="width: 50%;"></div>
+              </div>
+            </div>
+            <div class="meter-group">
+              <div class="meter-label">
+                <span data-i18n="stress">التوتر</span>
+                <span id="meter-stress-val" class="meter-val">20%</span>
+              </div>
+              <div class="meter-bar">
+                <div id="meter-stress-fill" class="meter-fill fill-stress" style="width: 20%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="dialogue-box" class="dialogue-box" tabindex="0" role="region" aria-live="polite">
+          <div class="dialogue-header">
+            <span id="dialogue-speaker" class="dialogue-speaker"></span>
+            <span id="dialogue-skip-hint" class="dialogue-hint" data-i18n="clickToSkip">انقر للإسراع وعرض الرد كاملاً</span>
+          </div>
+          <p id="dialogue-text" class="dialogue-text" data-i18n="dialoguePlaceholder">اختر أسلوباً واضغط على أي سؤال لبدء الاستجواب...</p>
+        </div>
+        <div id="skill-hints" class="skill-hint-list hidden" aria-live="polite"></div>
+
+        <div class="interrogation-controls">
+          <div class="approach-selector">
+            <span class="approach-title" data-i18n="selectApproach">اختر أسلوب الاستجواب:</span>
+            <div class="approach-buttons">
+              <button class="btn-approach active" data-approach="calm">
+                <span class="approach-icon">🕊️</span>
+                <span class="approach-label" data-i18n="approach_calm">هادئ</span>
+              </button>
+              <button class="btn-approach" data-approach="pressing">
+                <span class="approach-icon">⚡</span>
+                <span class="approach-label" data-i18n="approach_pressing">ضاغط</span>
+              </button>
+              <button class="btn-approach" data-approach="sympathetic">
+                <span class="approach-icon">🤝</span>
+                <span class="approach-label" data-i18n="approach_sympathetic">متعاطف</span>
+              </button>
+            </div>
+          </div>
+          <button id="btn-open-present-modal" class="btn btn-secondary btn-present">
+            <span class="btn-icon">📁</span>
+            <span data-i18n="presentEvidence">عرض دليل</span>
+          </button>
+        </div>
+
+        <div class="questions-section">
+          <div id="questions-list" class="questions-list"></div>
+        </div>
+
+        <!-- Present Evidence Modal -->
+        <div id="modal-present-evidence" class="scene-popup hidden" role="dialog" aria-modal="true">
+          <div class="popup-content modal-present-content">
+            <h3 data-i18n="presentEvidence">عرض دليل</h3>
+            <p class="modal-subtitle" data-i18n="chooseClueToPresent">اختر دليلاً لمواجهة المشتبه فيه به:</p>
+            <div id="present-clues-list" class="present-clues-grid"></div>
+            <button id="btn-close-present-modal" class="btn btn-secondary" data-i18n="cancel">إلغاء</button>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <!-- Crime Scene Screen -->
+    <section id="screen-crimeScene" class="screen hidden">
+      <header class="screen-header">
+        <h2 id="cs-case-title" data-i18n="crimeScene">مشهد الجريمة</h2>
+        <button id="btn-cs-to-suspects" class="btn-back" data-i18n="backToSuspects">العودة للمشتبه فيهم</button>
+      </header>
+      <main class="screen-content crime-scene-content">
+        <div class="scene-wrapper" id="scene-wrapper">
+          <div class="scene-container" id="scene-container">
+            <svg class="scene-svg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" aria-label="Crime scene office">
+              <defs>
+                <linearGradient id="wallGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#2a2d38;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#1e212a;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <rect x="0" y="0" width="1000" height="700" fill="url(#wallGrad)" />
+              <rect x="120" y="120" width="760" height="460" fill="#242733" stroke="#3d414f" stroke-width="3" />
+              <rect x="380" y="320" width="260" height="140" fill="#3a3f4c" stroke="#3d414f" stroke-width="2" />
+              <rect x="400" y="340" width="220" height="100" fill="#2e3240" />
+              <rect x="620" y="320" width="140" height="140" fill="#3a3f4c" stroke="#3d414f" stroke-width="2" />
+              <rect x="630" y="330" width="120" height="120" fill="#2e3240" />
+              <rect x="160" y="460" width="100" height="160" fill="#3a3f4c" stroke="#3d414f" stroke-width="2" />
+              <rect x="170" y="470" width="80" height="140" fill="#2e3240" />
+              <rect x="720" y="460" width="120" height="120" fill="#3a3f4c" stroke="#3d414f" stroke-width="2" />
+              <rect x="730" y="470" width="100" height="100" fill="#2e3240" />
+              <rect x="120" y="120" width="100" height="30" fill="#d4a017" />
+              <text x="500" y="90" fill="#d4a017" font-family="Cairo, sans-serif" font-size="16" text-anchor="middle" style="opacity:0.7;">مكتب صاحب المطعم</text>
+            </svg>
+            <canvas id="scene-dust" class="scene-dust" aria-hidden="true"></canvas>
+            <div id="scene-spotlight" class="scene-spotlight" aria-hidden="true"></div>
+            <div class="checkpoints" id="checkpoints"></div>
+          </div>
+        </div>
+        <div id="scene-popup" class="scene-popup hidden">
+          <div class="popup-content">
+            <h3 id="popup-title"></h3>
+            <p id="popup-desc"></p>
+            <button id="popup-close" class="btn btn-primary" data-i18n="ok">حسناً</button>
+          </div>
+        </div>
+        <div id="toast" class="toast hidden"></div>
+      </main>
+    </section>
+
+    <!-- Case End Screen -->
+    <section id="screen-caseEnd" class="screen hidden">
+      <header class="screen-header">
+        <h2 data-i18n="caseEndTitle">ختام القضية</h2>
+        <button id="btn-case-end-home" class="btn-back" data-i18n="backHome">العودة للرئيسية</button>
+      </header>
+      <main class="screen-content case-end-content">
+        <div id="case-end-stars" class="case-end-stars" aria-hidden="true"></div>
+        <h3 id="case-end-title"></h3>
+        <p id="case-end-narrative" class="case-end-narrative"></p>
+        <div id="case-end-summary" class="case-end-summary"></div>
+        <div id="case-end-player" class="case-end-player"></div>
+        <div class="case-end-actions">
+          <button id="btn-new-case" class="btn btn-primary" data-i18n="newCase">قضية جديدة</button>
+          <button id="btn-replay-case" class="btn btn-secondary" data-i18n="replayCase">إعادة القضية</button>
+        </div>
+      </main>
+    </section>
+
+    <!-- Promotion Screen -->
+    <section id="screen-promotion" class="screen hidden">
+      <header class="screen-header promotion-header">
+        <span aria-hidden="true"></span>
+        <button class="btn-lang" data-i18n="languageToggle">English</button>
+      </header>
+      <main class="screen-content promotion-content">
+        <div id="promotion-avatar" class="promotion-avatar" aria-hidden="true"></div>
+        <h2 class="promotion-title" data-i18n="promotionTitle">ترقية!</h2>
+        <p class="promotion-message" data-i18n="promotionMessage">أحسنت! لقد وصلت إلى رتبة جديدة.</p>
+        <p class="promotion-rank-label" data-i18n="promotionRankLabel">رتبتك الجديدة</p>
+        <p id="promotion-rank" class="promotion-rank"></p>
+        <div id="promotion-stars" class="promotion-stars" aria-hidden="true"></div>
+        <button id="btn-promotion-continue" class="btn btn-primary" data-i18n="continueGame">متابعة</button>
+      </main>
+    </section>
+  </div>
+
+  <!-- Confirmation Dialog -->
+  <div id="confirm-modal" class="scene-popup confirm-modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+    <div class="popup-content confirm-content">
+      <h3 id="confirm-title" data-i18n="confirmTitle">تأكيد</h3>
+      <p id="confirm-message" class="confirm-message"></p>
+      <div class="confirm-actions">
+        <button id="btn-confirm-cancel" class="btn btn-secondary" data-i18n="cancel">إلغاء</button>
+        <button id="btn-confirm-ok" class="btn btn-danger" data-i18n="confirmAction">تأكيد</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="fx-flash" class="fx-flash" aria-hidden="true"></div>
+
+  <button id="btn-settings" class="settings-toggle" data-i18n-title="settingsTitle" data-i18n-aria-label="settingsTitle">
+    <span aria-hidden="true">⚙</span>
+  </button>
+
+  <div id="settings-backdrop" class="settings-backdrop hidden"></div>
+  <section id="settings-panel" class="settings-panel hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <header class="settings-header">
+      <h2 id="settings-title" data-i18n="settingsTitle">الإعدادات</h2>
+      <button id="btn-settings-close" class="btn-close-settings" data-i18n-title="settingsClose" data-i18n-aria-label="settingsClose">✕</button>
+    </header>
+    <div class="settings-body">
+      <h3 class="settings-section-title" data-i18n="settingsAudioSection">الصوت</h3>
+      <div class="settings-row">
+        <label for="settings-music" data-i18n="settingsMusic">الموسيقى</label>
+        <span id="settings-music-value" class="settings-value">75%</span>
+        <input id="settings-music" class="settings-range" type="range" min="0" max="100" step="5" value="75" />
+      </div>
+      <div class="settings-row">
+        <label for="settings-sfx" data-i18n="settingsSfx">المؤثرات الصوتية</label>
+        <span id="settings-sfx-value" class="settings-value">80%</span>
+        <input id="settings-sfx" class="settings-range" type="range" min="0" max="100" step="5" value="80" />
+      </div>
+      <label class="settings-toggle-row" for="settings-mute">
+        <span data-i18n="settingsMute">كتم كل الأصوات</span>
+        <input id="settings-mute" class="settings-checkbox" type="checkbox" />
+      </label>
+
+      <h3 class="settings-section-title" data-i18n="settingsVisualSection">العرض</h3>
+      <label class="settings-toggle-row" for="settings-visuals">
+        <span data-i18n="settingsVisuals">التأثيرات البصرية</span>
+        <input id="settings-visuals" class="settings-checkbox" type="checkbox" checked />
+      </label>
+
+      <div id="settings-case-section" class="settings-case-section" style="display:none;">
+        <h3 class="settings-section-title" data-i18n="settingsCaseSection">القضية</h3>
+        <p class="settings-note" data-i18n="resetCaseHint">يمسح أدلة وإفادات وقرارات وتحاليل القضية الحالية فقط، ويحفظ الرتبة والنجوم والنتايج القديمة.</p>
+        <button id="btn-reset-case-settings" class="btn btn-reset-case settings-case-reset" data-i18n="resetCurrentCase">إعادة القضية الحالية</button>
+      </div>
+
+      <p id="settings-reduced-note" class="settings-note hidden" data-i18n="settingsReducedMotionNote">تم تقليل الحركة تلقائياً حسب إعدادات النظام.</p>
+      <p class="settings-note" data-i18n="settingsSavedHint">تُحفظ الإعدادات تلقائياً على هذا الجهاز.</p>
+    </div>
+  </section>
+
+  <button id="btn-toggle-tablet" class="tablet-toggle" data-i18n-title="tablet" data-i18n-aria-label="tablet">
+    <span class="tablet-toggle-icon">📋</span>
+    <span class="tablet-toggle-label" data-i18n="tablet">تابلت المحقق</span>
+  </button>
+  <div id="tablet" class="tablet">
+    <div class="tablet-body">
+      <div class="tablet-status">
+        <span id="tablet-time">--:--</span>
+        <button id="btn-close-tablet" class="btn-close-tablet" data-i18n-title="closeTablet" data-i18n-aria-label="closeTablet">✕</button>
+      </div>
+      <div class="tablet-home" id="tablet-home">
+        <h2 data-i18n="tablet">تابلت المحقق</h2>
+        <div id="tablet-rank-card" class="detective-card detective-card-tablet hidden"></div>
+        <div class="tablet-apps">
+          <button class="tablet-app" data-app="evidence" data-i18n="evidenceTitle">الأدلة المجمعة</button>
+          <button class="tablet-app" data-app="suspects" data-i18n="suspectsTitle">المشتبه فيهم</button>
+          <button class="tablet-app" data-app="notes" data-i18n="notes">ملاحظاتي</button>
+          <button class="tablet-app" data-app="lab" data-i18n="labTitle">المعمل</button>
+          <button class="tablet-app" data-app="skills" data-i18n="skillsTitle"></button>
+          <button class="tablet-app" data-app="accuse" data-i18n="accuse">اتهام</button>
+        </div>
+      </div>
+      <div class="tablet-app-screen hidden" id="tablet-evidence">
+        <header class="tablet-app-header">
+          <button class="btn-back-tablet" data-i18n="tabletHome">الرئيسية</button>
+          <h3 data-i18n="evidenceTitle">الأدلة المجمعة</h3>
+        </header>
+        <div id="evidence-list" class="tablet-app-content"></div>
+      </div>
+      <div class="tablet-app-screen hidden" id="tablet-suspects">
+        <header class="tablet-app-header">
+          <button class="btn-back-tablet" data-i18n="tabletHome">الرئيسية</button>
+          <h3 data-i18n="suspectsTitle">المشتبه فيهم</h3>
+        </header>
+        <div id="suspects-list" class="tablet-app-content"></div>
+      </div>
+      <div class="tablet-app-screen hidden" id="tablet-notes">
+        <header class="tablet-app-header">
+          <button class="btn-back-tablet" data-i18n="tabletHome">الرئيسية</button>
+          <h3 data-i18n="notes">ملاحظاتي</h3>
+        </header>
+        <textarea id="notes-input" class="tablet-notes-area" data-i18n-placeholder="notesPlaceholder"></textarea>
+      </div>
+      <div class="tablet-app-screen hidden" id="tablet-lab">
+        <header class="tablet-app-header">
+          <button class="btn-back-tablet" data-i18n="tabletHome">الرئيسية</button>
+          <h3 data-i18n="labTitle">المعمل</h3>
+        </header>
+        <div class="lab-tabs">
+          <button class="lab-tab active" data-lab-tab="analyses" data-i18n="labTabAnalyses">التحاليل</button>
+          <button class="lab-tab" data-lab-tab="autopsy" data-i18n="labTabAutopsy">الطب الشرعي</button>
+        </div>
+        <div class="tablet-app-content lab-content">
+          <div id="lab-panel-analyses" class="lab-panel">
+            <div id="lab-summary" class="lab-summary"></div>
+            <div id="lab-jobs" class="lab-jobs"></div>
+            <h4 class="lab-section-title" data-i18n="labReportsTitle">تقارير المعمل</h4>
+            <div id="lab-reports" class="lab-reports"></div>
+          </div>
+          <div id="lab-panel-autopsy" class="lab-panel hidden"></div>
+        </div>
+        <div id="lab-minigame" class="lab-minigame hidden"></div>
+      </div>
+      <div class="tablet-app-screen hidden" id="tablet-skills">
+        <header class="tablet-app-header">
+          <button class="btn-back-tablet" data-i18n="tabletHome"></button>
+          <h3 data-i18n="skillsTitle"></h3>
+        </header>
+        <div class="skills-progress-card">
+          <div class="skills-progress-heading">
+            <span data-i18n="skillExperience"></span>
+            <strong id="skills-xp-total"></strong>
+          </div>
+          <div id="skills-xp-progress" class="skills-xp-track" role="progressbar">
+            <div id="skills-xp-fill" class="skills-xp-fill"></div>
+          </div>
+          <p id="skills-xp-remaining" class="skills-xp-remaining"></p>
+          <p id="skills-points-available" class="skills-points-available"></p>
+        </div>
+        <div id="skills-list" class="skills-list"></div>
+      </div>
+      <div class="tablet-app-screen hidden" id="tablet-accuse">
+        <header class="tablet-app-header">
+          <button class="btn-back-tablet" data-i18n="tabletHome">الرئيسية</button>
+          <h3 data-i18n="accusationTitle">اتهام المشتبه فيه</h3>
+        </header>
+        <div class="tablet-app-content tablet-accuse-content">
+          <p data-i18n="tabletAccuseHint">هل وصلت إلى الحقيقة؟ افتح شاشة الاتهام واختر القاتل والدافع.</p>
+          <button id="btn-tablet-accuse" class="btn btn-danger" data-i18n="accuse">اتهام</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/state.js"></script>
+  <script src="data/ranks.js"></script>
+  <script src="data/rules.js"></script>
+  <script src="data/skills.js"></script>
+  <script src="data/cases.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/effects.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
