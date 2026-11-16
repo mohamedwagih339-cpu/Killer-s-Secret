@@ -1,9 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
   const savedLang = localStorage.getItem("detective_lang") || "ar";
   setLanguage(savedLang);
+  if (typeof updateTabletTime === "function") {
+    updateTabletTime();
+    window.setInterval(updateTabletTime, 30000);
+  }
 
   // Load the save before deciding between the setup screen and the home screen.
   loadState();
+
+  // Keep generated cases stable in the save and validate them before exposing them to play.
+  ensureGeneratedCases();
 
   // Validate every loaded case so unsolvable or incomplete data is visible in the console.
   if (typeof validateCase === "function" && Array.isArray(CASES)) {
@@ -13,12 +20,23 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".btn-lang").forEach((btn) => {
     btn.addEventListener("click", () => {
       setLanguage(currentLang === "ar" ? "en" : "ar");
+      if (gameState.currentScreen === "caseSelect") renderCaseSelection();
     });
   });
 
   const btnStart = document.getElementById("btn-start-case");
   if (btnStart) {
     btnStart.addEventListener("click", startCaseFromHome);
+  }
+
+  const btnCaseSelectHome = document.getElementById("btn-case-select-home");
+  if (btnCaseSelectHome) {
+    btnCaseSelectHome.addEventListener("click", () => showScreen("home"));
+  }
+
+  const btnRandomCase = document.getElementById("btn-case-random");
+  if (btnRandomCase) {
+    btnRandomCase.addEventListener("click", startRandomCase);
   }
 
   const btnContinue = document.getElementById("btn-continue");
@@ -204,6 +222,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const btnCompleteReplay = document.getElementById("btn-complete-replay");
+  if (btnCompleteReplay) {
+    btnCompleteReplay.addEventListener("click", startNewCase);
+  }
+
+  const btnCompleteRandom = document.getElementById("btn-complete-random");
+  if (btnCompleteRandom) {
+    btnCompleteRandom.addEventListener("click", startRandomCase);
+  }
+
   // Tablet toggle
   const btnToggleTablet = document.getElementById("btn-toggle-tablet");
   const btnCloseTablet = document.getElementById("btn-close-tablet");
@@ -372,7 +400,18 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     renderHomeRankCard();
     renderTabletRankCard();
-    showScreen("home");
+    if (gameState.currentScreen === "promotion" &&
+        gameState.lastProgression &&
+        gameState.lastProgression.type === "promotion" &&
+        areAllCasesCompleted()) {
+      renderPromotion();
+      showScreen("promotion");
+    } else if (gameState.currentScreen === "gameComplete" && areAllCasesCompleted()) {
+      renderGameComplete();
+      showScreen("gameComplete");
+    } else {
+      showScreen("home");
+    }
   }
   updateHomeCaseControls();
 });

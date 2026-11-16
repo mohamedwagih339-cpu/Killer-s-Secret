@@ -1,4 +1,21 @@
+let crimeSceneSirenCaseId = null;
+
+function updateTabletTime() {
+  const clock = document.getElementById("tablet-time");
+  if (!clock) return;
+  const locale = currentLang === "ar" ? "ar" : "en";
+  clock.textContent = new Intl.DateTimeFormat(locale, {
+    hour: "2-digit",
+    minute: "2-digit"
+  }).format(new Date());
+}
+
 function showScreen(name) {
+  const caseId = gameState.currentCase && gameState.currentCase.id;
+  const playSceneSiren = name === "crimeScene" && caseId &&
+    crimeSceneSirenCaseId !== caseId && gameState.lastCaseScreen !== "crimeScene";
+  if (name === "crimeScene" && caseId) crimeSceneSirenCaseId = caseId;
+
   document.querySelectorAll(".screen").forEach((screen) => {
     screen.classList.remove("active");
     screen.classList.add("hidden");
@@ -26,6 +43,9 @@ function showScreen(name) {
   }
   if (typeof setMusicForScreen === "function") setMusicForScreen(name);
   if (typeof fxHandleScreen === "function") fxHandleScreen(name);
+  if ((playSceneSiren || name === "interrogation") && typeof playPoliceSiren === "function") {
+    playPoliceSiren();
+  }
   saveState();
 }
 
@@ -106,6 +126,24 @@ function getSuspectAvatarSvg(suspectId) {
     theme = { bg: "#241c2e", body: "#4a3b69", head: "#ebd0be", hair: "#2a1b18", accent: "#d4a017", detail: "manager" };
   } else if (suspectId === "suspect_04") {
     theme = { bg: "#1b2426", body: "#34495e", head: "#dfb498", hair: "#718096", accent: "#a0aec0", detail: "guard" };
+  } else if (suspectId === "suspect_m1") {
+    theme = { bg: "#20242e", body: "#2f3a4d", head: "#e8c39c", hair: "#4a4f57", accent: "#d4a017", detail: "curator" };
+  } else if (suspectId === "suspect_m2") {
+    theme = { bg: "#22282b", body: "#4a6b5a", head: "#f0c9a6", hair: "#3a2a20", accent: "#c9d2da", detail: "restorer" };
+  } else if (suspectId === "suspect_m3") {
+    theme = { bg: "#1b2426", body: "#2f4152", head: "#e2b18b", hair: "#1a202c", accent: "#a0aec0", detail: "guard2" };
+  } else if (suspectId === "suspect_m4") {
+    theme = { bg: "#26202a", body: "#4a3550", head: "#e6c3a0", hair: "#2a1b18", accent: "#d4a017", detail: "collector" };
+  } else if (suspectId === "suspect_h1") {
+    theme = { bg: "#241c2e", body: "#3a2f4a", head: "#e8c39c", hair: "#4a4f57", accent: "#d4a017", detail: "hotelmanager" };
+  } else if (suspectId === "suspect_h2") {
+    theme = { bg: "#1f2a26", body: "#2f5a4a", head: "#f0c9a6", hair: "#3a2a20", accent: "#e7dfc8", detail: "maid" };
+  } else if (suspectId === "suspect_h3") {
+    theme = { bg: "#20242e", body: "#33405a", head: "#e2b18b", hair: "#1a202c", accent: "#c9d2da", detail: "guest" };
+  } else if (suspectId === "suspect_h4") {
+    theme = { bg: "#1b2426", body: "#2f4152", head: "#e2b18b", hair: "#1a202c", accent: "#7ec2e0", detail: "receptionist" };
+  } else if (suspectId === "suspect_h5") {
+    theme = { bg: "#2a1e22", body: "#4a3540", head: "#dfb498", hair: "#2a1b18", accent: "#d4a017", detail: "partner" };
   }
 
   let accessorySvg = "";
@@ -130,6 +168,79 @@ function getSuspectAvatarSvg(suspectId) {
     accessorySvg = `
       <path d="M36 34 Q50 24 64 34 L66 38 Q50 34 34 38 Z" fill="#1e293b" />
       <rect x="47" y="28" width="6" height="5" rx="1" fill="${theme.accent}" />
+    `;
+  } else if (theme.detail === "curator") {
+    // Curator: spectacles and a neat bow tie.
+    accessorySvg = `
+      <circle cx="43" cy="48" r="6" fill="none" stroke="${theme.accent}" stroke-width="1.6" />
+      <circle cx="57" cy="48" r="6" fill="none" stroke="${theme.accent}" stroke-width="1.6" />
+      <path d="M49 48h2M37 47l-5-2M63 47l5-2" stroke="${theme.accent}" stroke-width="1.6" />
+      <polygon points="46,67 50,70 54,67 50,74" fill="${theme.accent}" />
+    `;
+  } else if (theme.detail === "restorer") {
+    // Restorer: tied-back hair, a headband and a brush tucked behind the ear.
+    accessorySvg = `
+      <path d="M32 42 Q50 30 68 42" stroke="${theme.accent}" stroke-width="2.4" fill="none" />
+      <circle cx="66" cy="40" r="3" fill="${theme.accent}" />
+      <path d="M67 44l8 12" stroke="#8a6a44" stroke-width="2.6" stroke-linecap="round" />
+      <path d="M74 55l3 4" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round" />
+    `;
+  } else if (theme.detail === "guard2") {
+    // Second guard: peaked cap with a badge.
+    accessorySvg = `
+      <path d="M34 36 Q50 26 66 36 L68 40 Q50 36 32 40 Z" fill="#243447" />
+      <path d="M38 36 Q50 30 62 36" stroke="#0f172a" stroke-width="2" fill="none" />
+      <rect x="47" y="29" width="6" height="5" rx="1" fill="${theme.accent}" />
+      <circle cx="50" cy="38" r="2" fill="${theme.accent}" />
+    `;
+  } else if (theme.detail === "collector") {
+    // Collector: silk scarf and a gold signet ring on the raised hand.
+    accessorySvg = `
+      <path d="M38 64 Q50 74 62 64 L66 70 Q50 80 34 70 Z" fill="${theme.accent}" />
+      <path d="M38 64 Q50 74 62 64" stroke="#7a5a12" stroke-width="1.4" fill="none" />
+      <circle cx="70" cy="76" r="3.4" fill="#f0d47a" stroke="#8a6420" stroke-width="1.2" />
+    `;
+  } else if (theme.detail === "hotelmanager") {
+    // Hotel manager: suit lapels, necktie and a pinned name tag.
+    accessorySvg = `
+      <path d="M38 66l12 10-6 12-10-16z" fill="#1f2430" opacity=".6" />
+      <path d="M62 66l-12 10 6 12 10-16z" fill="#1f2430" opacity=".6" />
+      <path d="M50 64l-4 6 4 16 4-16z" fill="${theme.accent}" />
+      <rect x="60" y="74" width="13" height="8" rx="2" fill="#e7dfc8" stroke="#8a6420" stroke-width="1" />
+    `;
+  } else if (theme.detail === "maid") {
+    // Maid: wrapped headscarf with a side knot.
+    accessorySvg = `
+      <path d="M31 45 Q50 28 69 45" stroke="${theme.accent}" stroke-width="6" fill="none" />
+      <circle cx="69" cy="46" r="4" fill="${theme.accent}" />
+      <path d="M69 50l3 7" stroke="${theme.accent}" stroke-width="3" stroke-linecap="round" />
+      <path d="M40 70h20" stroke="${theme.accent}" stroke-width="3" stroke-linecap="round" opacity=".7" />
+    `;
+  } else if (theme.detail === "guest") {
+    // Guest: designer sunglasses and a coat collar.
+    accessorySvg = `
+      <rect x="38" y="44" width="11" height="8" rx="3" fill="#141a22" />
+      <rect x="51" y="44" width="11" height="8" rx="3" fill="#141a22" />
+      <path d="M49 47h2M37 45l-6-2M63 45l6-2" stroke="#141a22" stroke-width="1.8" />
+      <path d="M36 66l14 8-4 12-14-14z" fill="#1f2430" opacity=".5" />
+      <path d="M64 66l-14 8 4 12 14-14z" fill="#1f2430" opacity=".5" />
+    `;
+  } else if (theme.detail === "receptionist") {
+    // Receptionist: neat necktie and a chest name badge.
+    accessorySvg = `
+      <path d="M44 64l6 4 6-4" stroke="#1f2430" stroke-width="2" fill="none" />
+      <path d="M50 68l-4 6 4 14 4-14z" fill="${theme.accent}" />
+      <rect x="58" y="73" width="15" height="9" rx="2" fill="#e7dfc8" stroke="#2f4152" stroke-width="1.2" />
+      <path d="M61 77h9m-9 2h6" stroke="#5a6675" stroke-width="1.1" />
+    `;
+  } else if (theme.detail === "partner") {
+    // Business partner: moustache, necktie and a pocket square.
+    accessorySvg = `
+      <path d="M43 55q7-4 14 0-7 4-14 0z" fill="${theme.hair}" />
+      <path d="M50 66l-4 6 4 15 4-15z" fill="${theme.accent}" />
+      <path d="M38 66l12 8" stroke="#1f2430" stroke-width="2" opacity=".6" />
+      <path d="M62 66l-12 8" stroke="#1f2430" stroke-width="2" opacity=".6" />
+      <path d="M62 74h10l-2 5h-8z" fill="${theme.accent}" opacity=".8" />
     `;
   }
 
@@ -342,11 +453,27 @@ function renderInterrogation(suspectId) {
         playTypewriter(t("refuseToSpeak"));
       } else {
         const responseObj = q.responses[currentApproach] || q.responses.calm;
-        const answerText = responseObj[currentLang];
+        const revealedSecret = q.secretReveal && q.secretReveal.approach === currentApproach
+          ? q.secretReveal.text
+          : null;
+        const statementText = revealedSecret
+          ? {
+            ar: `${responseObj.ar} — ${revealedSecret.ar}`,
+            en: `${responseObj.en} — ${revealedSecret.en}`
+          }
+          : responseObj;
+        const answerText = statementText[currentLang];
 
         const rule = getApproachRule(s.personality, currentApproach);
         const empathyBonus = currentApproach === "sympathetic" ? getSkillLevel("empathy") * 5 : 0;
-        updateSuspectStats(s.id, rule.cooperation + empathyBonus, rule.stress);
+        const pressureMultiplier = currentApproach === "pressing" && gameState.currentCase &&
+          Number.isFinite(gameState.currentCase.pressingCooperationMultiplier)
+          ? Math.max(1, gameState.currentCase.pressingCooperationMultiplier)
+          : 1;
+        const cooperationChange = rule.cooperation < 0
+          ? Math.round(rule.cooperation * pressureMultiplier)
+          : rule.cooperation;
+        updateSuspectStats(s.id, cooperationChange + empathyBonus, rule.stress);
         updateInvestigationScore(rule.points);
 
         gameState.decisions.push({
@@ -370,7 +497,7 @@ function renderInterrogation(suspectId) {
           suspectId: s.id,
           questionId: q.id,
           approach: currentApproach,
-          text: responseObj
+          text: statementText
         });
 
         // Asking a new question costs one investigation action (also advances the lab).
@@ -534,6 +661,12 @@ function renderCrimeScene() {
   const c = gameState.currentCase;
   if (!c || !c.scene) return;
 
+  // Each case can declare its own scene artwork; the office scene is the default.
+  const sceneId = c.sceneId || "office";
+  document.querySelectorAll("#scene-container .scene-svg").forEach((svg) => {
+    svg.style.display = svg.getAttribute("data-scene") === sceneId ? "" : "none";
+  });
+
   document.getElementById("cs-case-title").textContent = c.title[currentLang];
   const container = document.getElementById("checkpoints");
   container.innerHTML = "";
@@ -541,7 +674,11 @@ function renderCrimeScene() {
   c.scene.forEach((point) => {
     if (point.hiddenUntil) {
       const isUnlocked = gameState.unlockedPoints.includes(point.id) ||
-        (gameState.statements && gameState.statements.some((st) => st.suspectId === point.hiddenUntil.suspectId && st.questionId === point.hiddenUntil.questionId));
+        (gameState.statements && gameState.statements.some((st) =>
+          st.suspectId === point.hiddenUntil.suspectId &&
+          st.questionId === point.hiddenUntil.questionId &&
+          (!point.hiddenUntil.approach || st.approach === point.hiddenUntil.approach)
+        ));
       if (!isUnlocked) return;
     }
 
@@ -561,6 +698,15 @@ function renderCrimeScene() {
     const dot = document.createElement("div");
     dot.className = "checkpoint-dot";
     cp.appendChild(dot);
+    if (point.bodyPresent) {
+      cp.classList.add("checkpoint-body");
+      cp.title = t("bodyScenePoint");
+      const marker = document.createElement("span");
+      marker.className = "checkpoint-body-marker";
+      marker.setAttribute("aria-hidden", "true");
+      marker.textContent = "☠";
+      cp.appendChild(marker);
+    }
 
     cp.addEventListener("click", () => {
       if (isSearched) {
@@ -866,16 +1012,17 @@ function upgradeSkill(skillId) {
 }
 
 function renderTablet() {
+  switchTabletApp("home");
   renderTabletEvidence();
   renderTabletSuspects();
   renderTabletNotes();
   renderTabletLab();
   renderSkillsApp();
   renderTabletRankCard();
-  switchTabletApp("home");
 }
 
 function switchTabletApp(app) {
+  if (app !== "lab" && typeof stopLabHeartbeat === "function") stopLabHeartbeat();
   document.querySelectorAll(".tablet-app-screen").forEach((s) => s.classList.add("hidden"));
   document.querySelectorAll(".tablet-home").forEach((el) => {
     if (app === "home") el.classList.remove("hidden"); else el.classList.add("hidden");
@@ -1047,10 +1194,137 @@ function saveNotes() {
 
 let labActiveTab = "analyses";
 let labGame = null;
+const AUTOPSY_ANALYSIS_DURATION = 20000;
+let autopsyAnimation = { caseRef: null, startedAt: 0, status: "idle", timer: null };
 
 function isTabletOpen() {
   const tablet = document.getElementById("tablet");
   return !!(tablet && tablet.classList.contains("show"));
+}
+
+function isAutopsyPanelActive() {
+  const labScreen = document.getElementById("tablet-lab");
+  const panel = document.getElementById("lab-panel-autopsy");
+  const tabletHome = document.getElementById("tablet-home");
+  return labActiveTab === "autopsy" && isTabletOpen() &&
+    !!labScreen && !labScreen.classList.contains("hidden") &&
+    !!tabletHome && tabletHome.classList.contains("hidden") &&
+    !!panel && !panel.classList.contains("hidden");
+}
+
+function resetAutopsyAnimation(caseRef) {
+  if (autopsyAnimation.timer) clearTimeout(autopsyAnimation.timer);
+  if (typeof stopLabHeartbeat === "function") stopLabHeartbeat();
+  autopsyAnimation = { caseRef: caseRef, startedAt: 0, status: "idle", timer: null };
+}
+
+function finishAutopsyAnimation(caseRef) {
+  if (autopsyAnimation.caseRef !== caseRef || autopsyAnimation.status !== "running") return;
+  autopsyAnimation.timer = null;
+  autopsyAnimation.status = "finishing";
+  if (typeof stopLabHeartbeat === "function") stopLabHeartbeat();
+
+  const panel = document.getElementById("lab-panel-autopsy");
+  const scene = panel && panel.querySelector(".autopsy-progress-scene");
+  if (scene) scene.classList.add("is-finishing");
+
+  autopsyAnimation.timer = setTimeout(() => {
+    if (autopsyAnimation.caseRef !== caseRef) return;
+    autopsyAnimation.timer = null;
+    autopsyAnimation.status = "complete";
+    renderAutopsyReport();
+  }, 420);
+}
+
+function renderAutopsyProgressScene(panel, caseRef) {
+  if (autopsyAnimation.caseRef !== caseRef) resetAutopsyAnimation(caseRef);
+  if (autopsyAnimation.status === "complete") return false;
+  if (!isAutopsyPanelActive()) return false;
+
+  if (autopsyAnimation.status === "idle") {
+    autopsyAnimation.startedAt = Date.now();
+    autopsyAnimation.status = "running";
+  }
+
+  const elapsed = Math.min(AUTOPSY_ANALYSIS_DURATION, Date.now() - autopsyAnimation.startedAt);
+  const progress = Math.round(elapsed / AUTOPSY_ANALYSIS_DURATION * 100);
+  if (autopsyAnimation.status === "running") {
+    if (elapsed >= AUTOPSY_ANALYSIS_DURATION) {
+      autopsyAnimation.status = "finishing";
+    } else {
+      if (typeof startLabHeartbeat === "function") startLabHeartbeat();
+      if (!autopsyAnimation.timer) {
+        autopsyAnimation.timer = setTimeout(
+          () => finishAutopsyAnimation(caseRef),
+          AUTOPSY_ANALYSIS_DURATION - elapsed
+        );
+      }
+    }
+  }
+
+  const finishingClass = autopsyAnimation.status === "finishing" ? " is-finishing" : "";
+  panel.innerHTML = `
+    <section class="autopsy-progress-scene${finishingClass}" aria-label="${t("autopsyInProgress")}">
+      <h4 class="autopsy-progress-title">${t("autopsyInProgress")}</h4>
+      <svg class="autopsy-progress-svg" viewBox="0 0 520 230" aria-hidden="true">
+        <defs>
+          <linearGradient id="autopsy-table" x2="0" y2="1">
+            <stop offset="0" stop-color="#657789" />
+            <stop offset="1" stop-color="#273646" />
+          </linearGradient>
+          <linearGradient id="autopsy-sheet" x2="0" y2="1">
+            <stop offset="0" stop-color="#dbe4e9" />
+            <stop offset="1" stop-color="#9eafbc" />
+          </linearGradient>
+          <radialGradient id="autopsy-lamp-glow">
+            <stop stop-color="#f2d37a" stop-opacity=".42" />
+            <stop offset="1" stop-color="#f2d37a" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <rect width="520" height="230" rx="10" fill="#0b1420" />
+        <path d="M0 176h520v54H0z" fill="#111d2a" />
+        <ellipse cx="260" cy="142" rx="180" ry="58" fill="url(#autopsy-lamp-glow)" />
+        <g class="autopsy-lamp-head">
+          <path d="M260 0v24" stroke="#aab9c5" stroke-width="5" />
+          <path d="M220 28q40-25 80 0l-11 17h-58z" fill="#d2a95d" stroke="#f0d47a" stroke-width="3" />
+          <path class="autopsy-lamp-beam" d="m229 45-65 82h192l-65-82z" fill="url(#autopsy-lamp-glow)" />
+        </g>
+        <path d="M116 139v52m286-52v52m-298 1h310" fill="none" stroke="#8999a8" stroke-width="8" stroke-linecap="round" />
+        <rect x="76" y="126" width="370" height="17" rx="7" fill="url(#autopsy-table)" stroke="#b3c1cd" stroke-width="3" />
+        <ellipse cx="178" cy="119" rx="23" ry="16" fill="#728394" />
+        <path d="M147 121q18-20 47-12 30-12 60 0 31-10 58 2 28-13 57 3l11 15H137z" fill="url(#autopsy-sheet)" stroke="#d4e0e8" stroke-width="3" />
+        <path d="M194 113q31 12 61 0m18 4q23 10 47-1" fill="none" stroke="#8193a2" stroke-opacity=".62" stroke-width="3" />
+        <g class="autopsy-hand-left">
+          <path d="M49 78q10-11 20-3l7 16 31 16-8 14-38-16q-16-9-12-27z" fill="#5c8cae" stroke="#c3d9e8" stroke-width="3" />
+          <path d="m88 104 21 3-2 9-21-3z" fill="#26394b" stroke="#d4a017" stroke-width="2" />
+          <path class="autopsy-flashlight-beam" d="m106 105 69 14-2 16-71-17z" fill="#e2bb58" fill-opacity=".26" />
+          <path d="m99 108 56 10m-54 7 55-4" stroke="#c5d0d8" stroke-width="3" stroke-linecap="round" />
+        </g>
+        <g class="autopsy-hand-right">
+          <path d="M458 73q-11-8-19 4l-7 17-31 13 7 15 39-12q17-9 11-37z" fill="#5c8cae" stroke="#c3d9e8" stroke-width="3" />
+          <g class="autopsy-tool-lens">
+            <circle cx="365" cy="108" r="20" fill="#17344a" fill-opacity=".72" stroke="#c4d2de" stroke-width="4" />
+            <circle cx="365" cy="108" r="13" fill="#84c8e8" fill-opacity=".22" stroke="#84c8e8" stroke-width="2" />
+            <path d="m379 123 15 17" stroke="#d4a017" stroke-width="6" stroke-linecap="round" />
+          </g>
+        </g>
+      </svg>
+      <p class="autopsy-progress-caption">${t("autopsyProgress")}</p>
+      <div class="autopsy-progress-track" role="progressbar" aria-label="${t("autopsyProgress")}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}">
+        <span class="autopsy-progress-fill" style="--progress:${progress / 100}; animation-delay:-${elapsed}ms"></span>
+      </div>
+    </section>
+  `;
+
+  if (autopsyAnimation.status === "finishing" && !autopsyAnimation.timer) {
+    autopsyAnimation.timer = setTimeout(() => {
+      if (autopsyAnimation.caseRef !== caseRef) return;
+      autopsyAnimation.timer = null;
+      autopsyAnimation.status = "complete";
+      renderAutopsyReport();
+    }, 420);
+  }
+  return true;
 }
 
 function getLabClue(clueId) {
@@ -1216,6 +1490,7 @@ function checkAutopsyUnlock() {
 
 function setLabTab(tab) {
   labActiveTab = tab === "autopsy" ? "autopsy" : "analyses";
+  if (labActiveTab !== "autopsy" && typeof stopLabHeartbeat === "function") stopLabHeartbeat();
   renderTabletLab();
 }
 
@@ -1673,11 +1948,13 @@ function renderAutopsyReport() {
   const c = gameState.currentCase;
 
   if (!c || !c.autopsy) {
+    resetAutopsyAnimation(null);
     panel.innerHTML = `<p class="lab-empty">${t("labNoReports")}</p>`;
     return;
   }
 
   if (!isAutopsyUnlocked()) {
+    if (autopsyAnimation.caseRef !== c) resetAutopsyAnimation(c);
     const done = Math.min(gameState.actions || 0, RULES.lab.autopsyUnlockActions);
     panel.innerHTML = `
       <div class="lab-lock">
@@ -1689,6 +1966,8 @@ function renderAutopsyReport() {
     `;
     return;
   }
+
+  if (renderAutopsyProgressScene(panel, c)) return;
 
   const suspects = c.suspects || [];
   panel.innerHTML = `
@@ -2058,6 +2337,9 @@ function confirmAccusation() {
   if (progression && progression.type === "promotion") {
     renderPromotion();
     showScreen("promotion");
+  } else if (areAllCasesCompleted()) {
+    renderGameComplete();
+    showScreen("gameComplete");
   } else {
     showScreen("caseEnd");
   }
@@ -2137,18 +2419,57 @@ function hasActiveCase() {
   return !!(gameState.currentCase && !gameState.caseCompleted);
 }
 
-// The home "Start Case" button opens the first unsolved case, then falls back
-// to the current case so a single-case build can always be replayed.
-function pickStartCase() {
+function getUnlockedCases() {
   const list = Array.isArray(CASES) ? CASES.filter(Boolean) : [];
-  if (!list.length) return null;
-  const uncompleted = list.find((caseObj) => !getLatestCaseResult(caseObj.id));
-  if (uncompleted) return uncompleted;
-  if (gameState.currentCase) {
-    const current = list.find((caseObj) => caseObj.id === gameState.currentCase.id);
-    if (current) return current;
+  if (areAllCasesCompleted()) return list;
+  const unlocked = [];
+  for (let index = 0; index < list.length; index++) {
+    if (index > 0 && (getBestCaseStars(list[index - 1].id) || 0) < 1) break;
+    unlocked.push(list[index]);
   }
-  return list[0];
+  return unlocked;
+}
+
+function renderCaseSelection() {
+  const container = document.getElementById("case-selection-list");
+  if (!container) return;
+  container.replaceChildren();
+
+  const unlockedIds = new Set(getUnlockedCases().map((caseObj) => caseObj.id));
+  const list = Array.isArray(CASES) ? CASES.filter(Boolean) : [];
+  list.forEach((caseObj, index) => {
+    const isUnlocked = unlockedIds.has(caseObj.id);
+    const bestStars = getBestCaseStars(caseObj.id) || 0;
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "case-select-card";
+    card.disabled = !isUnlocked;
+
+    const title = document.createElement("span");
+    title.className = "case-select-title";
+    title.textContent = caseObj.title && caseObj.title[currentLang]
+      ? caseObj.title[currentLang]
+      : caseObj.id;
+
+    const difficulty = document.createElement("span");
+    difficulty.className = "case-select-difficulty";
+    difficulty.textContent = tf("caseDifficulty", { level: index + 1 });
+
+    const stars = document.createElement("span");
+    stars.className = "case-select-stars";
+    stars.setAttribute("aria-label", tf("starsEarned", { stars: bestStars }));
+    stars.textContent = [0, 1, 2].map((star) => star < bestStars ? "★" : "☆").join(" ");
+
+    const status = document.createElement("span");
+    status.className = "case-select-status";
+    status.textContent = t(isUnlocked ? "caseAvailable" : "caseLocked");
+
+    card.append(title, difficulty, stars, status);
+    if (isUnlocked) {
+      card.addEventListener("click", () => startSelectedCase(caseObj));
+    }
+    container.appendChild(card);
+  });
 }
 
 function updateHomeCaseControls() {
@@ -2180,18 +2501,35 @@ function startCaseFromHome() {
     return;
   }
 
+  renderCaseSelection();
+  showScreen("caseSelect");
+}
+
+function startRandomCase() {
+  const unlocked = getUnlockedCases();
+  if (!unlocked.length) {
+    showToast(t("noMoreCases"));
+    return;
+  }
+  const selected = unlocked[Math.floor(Math.random() * unlocked.length)];
+  startSelectedCase(selected);
+}
+
+function startSelectedCase(target) {
+  if (!target || !getUnlockedCases().some((caseObj) => caseObj.id === target.id)) {
+    showToast(t("caseLocked"));
+    return;
+  }
+
   const begin = () => {
-    const target = pickStartCase();
-    if (!target) {
-      showToast(t("noMoreCases"));
-      return;
-    }
+    crimeSceneSirenCaseId = null;
     resetCaseProgress();
     resetAccusationDraft();
     gameState.currentCase = target;
     gameState.caseCompleted = false;
     gameState.lastCaseScreen = null;
     saveState();
+    if (typeof playPoliceSiren === "function") playPoliceSiren();
     renderIntro();
     showScreen("intro");
     updateHomeCaseControls();
@@ -2221,6 +2559,12 @@ function resumeCase() {
   if (!c) return;
 
   const screen = gameState.lastCaseScreen || "intro";
+  const validInterrogation = screen === "interrogation" && gameState.activeSuspectId &&
+    (c.suspects || []).some((suspect) => suspect.id === gameState.activeSuspectId);
+  if (screen === "crimeScene") crimeSceneSirenCaseId = c.id;
+  if (screen !== "interrogation" || !validInterrogation) {
+    if (typeof playPoliceSiren === "function") playPoliceSiren();
+  }
   if (typeof renderIntro === "function") renderIntro();
   if (typeof renderSuspects === "function") renderSuspects();
   if (typeof renderCrimeScene === "function") renderCrimeScene();
@@ -2230,9 +2574,7 @@ function resumeCase() {
     return;
   }
   if (screen === "interrogation") {
-    const validSuspect = gameState.activeSuspectId &&
-      (c.suspects || []).some((suspect) => suspect.id === gameState.activeSuspectId);
-    if (validSuspect) {
+    if (validInterrogation) {
       renderInterrogation(gameState.activeSuspectId);
       showScreen("interrogation");
     } else {
@@ -2328,6 +2670,7 @@ function resetCurrentCase() {
   const c = gameState.currentCase;
   if (!c) return false;
 
+  crimeSceneSirenCaseId = null;
   resetCaseProgress();
   gameState.currentCase = c;
   gameState.caseCompleted = false;
@@ -2380,28 +2723,46 @@ function getBestCaseStars(caseId) {
   return best;
 }
 
-function startNewCase() {
-  const currentId = gameState.currentCase ? gameState.currentCase.id : null;
-  const currentIndex = CASES.findIndex((item) => item.id === currentId);
-  const nextCase = currentIndex >= 0 ? CASES[currentIndex + 1] : null;
+function areAllCasesCompleted() {
+  const list = Array.isArray(CASES) ? CASES.filter(Boolean) : [];
+  return list.length > 0 && list.every((caseObj) => getBestCaseStars(caseObj.id) !== null);
+}
 
-  if (!nextCase) {
-    showToast(t("noMoreCases"));
-    showScreen("home");
-    return;
+function getBestTotalStars() {
+  const list = Array.isArray(CASES) ? CASES.filter(Boolean) : [];
+  return list.reduce((total, caseObj) => total + (getBestCaseStars(caseObj.id) || 0), 0);
+}
+
+function renderGameComplete() {
+  const list = Array.isArray(CASES) ? CASES.filter(Boolean) : [];
+  const rank = document.getElementById("game-complete-rank");
+  const stars = document.getElementById("game-complete-stars");
+  const cases = document.getElementById("game-complete-cases");
+
+  if (rank) rank.textContent = getRankName(getPlayerRankIndex());
+  if (stars) {
+    stars.textContent = tf("gameCompleteStarsCount", {
+      stars: getBestTotalStars(),
+      total: list.length * 3
+    });
   }
+  if (cases) {
+    cases.textContent = tf("gameCompleteCasesCount", {
+      completed: list.filter((caseObj) => getBestCaseStars(caseObj.id) !== null).length,
+      total: list.length
+    });
+  }
+}
 
-  resetCaseProgress();
-  resetAccusationDraft();
-  gameState.currentCase = nextCase;
-  saveState();
-  renderIntro();
-  showScreen("intro");
+function startNewCase() {
+  renderCaseSelection();
+  showScreen("caseSelect");
 }
 
 function replayCase() {
   const c = gameState.currentCase;
   if (!c) return;
+  crimeSceneSirenCaseId = null;
   resetCaseProgress();
   resetAccusationDraft();
   gameState.currentCase = c;
@@ -3039,6 +3400,11 @@ function continueFromPromotion() {
     ? getLatestCaseResult(gameState.currentCase.id)
     : null;
   if (latest) renderCaseEnd(latest);
+  if (areAllCasesCompleted()) {
+    renderGameComplete();
+    showScreen("gameComplete");
+    return;
+  }
   showScreen("caseEnd");
 }
 

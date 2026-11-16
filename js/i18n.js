@@ -1,12 +1,22 @@
 const translations = {
   ar: {
-    appTitle: "المحقق",
-    tagline: "لعبة تحقيق جنائي تفاعلية",
+    appTitle: "Killer's Secret",
+    gameLogoAlt: "شعار لعبة Killer's Secret",
+    tagline: "An Interactive Detective Game",
     startCase: "ابدأ القضية",
     continueGame: "متابعة",
+    homeCrimeTape: "مسرح جريمة · ممنوع العبور",
     languageToggle: "English",
     backHome: "العودة للرئيسية",
     caseTitle: "تفاصيل القضية",
+    caseSelectionTitle: "اختيار قضية",
+    caseSelectionIntro: "اختر قضية مفتوحة أو ابدأ قضية عشوائية.",
+    caseDifficulty: "الصعوبة: المستوى {level}",
+    caseAvailable: "متاحة",
+    caseLocked: "مغلقة — أكمل القضية السابقة بنجمة على الأقل",
+    randomCase: "قضية عشوائية",
+    bodyScenePoint: "موقع الجثة",
+    observatorySceneAlt: "مشهد جريمة داخل المرصد الفلكي",
     victim: "الضحية",
     location: "مكان الجريمة",
     suspects: "المشتبه فيهم",
@@ -109,6 +119,10 @@ const translations = {
     personality_nervous: "متوتر",
     personality_proud: "فخور",
     personality_calm: "هادئ",
+    personality_arrogant: "متغطرس",
+    personality_evasive: "مُراوغ",
+    personality_remorseful: "نادم",
+    personality_ruthless: "بارد وقاسٍ",
     category_alibi: "وقت الجريمة",
     category_relation: "العلاقة",
     category_motive: "الدافع",
@@ -138,6 +152,10 @@ const translations = {
     taunt_nervous: "م.. ما هذا؟ هذا لا يخصني إطلاقاً! لماذا تحاول تلفيق التهم لي؟!",
     taunt_proud: "هل تظن أن هذه السخافات ترهبني؟ لست مضطرة للرد على مثل هذا العبث.",
     taunt_calm: "هذا الدليل لا علاقة له بي على الإطلاق. أنصحك بالبحث في مكان آخر.",
+    taunt_arrogant: "هل تظن أن هذه التفاهات تنال من مكانتي؟ لن أضيع وقتي معك، عد بدليل حقيقي.",
+    taunt_evasive: "هذا... لا أعرف من أين أتيتم به، لكنه لا يعني شيئاً. حقاً، لا شيء.",
+    taunt_remorseful: "أرجوك... هذا لا علاقة له بما حدث، لماذا تقسو عليّ بهذه الطريقة؟",
+    taunt_ruthless: "أرني شيئاً حقيقياً. هذه الخردة لا تُخيف رجلاً مثلي.",
     labTitle: "المعمل",
     labTabAnalyses: "التحاليل",
     labTabAutopsy: "الطب الشرعي",
@@ -149,7 +167,7 @@ const translations = {
     labOpen: "افتح المعمل",
     labCapacity: "سعة المعمل: {used}/{max}",
     labActionsTaken: "الإجراءات المنفذة: {count}",
-    labFull: "المعمل مشغول بالكامل. انتظر انتهاء أحد التحليلين.",
+    labFull: "المعمل مشغول بالكامل. انتظر انتهاء أحد التحاليل.",
     labQueued: "تم إرسال الدليل إلى المعمل.",
     labProgress: "التقدم: {done}/{total}",
     labAnalysisReady: "اكتمل التحليل: {name}",
@@ -186,6 +204,8 @@ const translations = {
     labLockedHint: "افحص نقطة الجثة في مسرح الجريمة، أو أكمل {count} إجراءات من بداية القضية.",
     labUnlockProgress: "الإجراءات: {done}/{total}",
     labAutopsyUnlocked: "تقرير الطب الشرعي أصبح متاحاً في المعمل.",
+    autopsyInProgress: "تحليل الطب الشرعي جارٍ",
+    autopsyProgress: "تقدم التحليل",
     autopsyTitle: "تقرير التشريح",
     autopsyCause: "سبب الوفاة",
     autopsyTime: "وقت الوفاة التقريبي",
@@ -220,6 +240,14 @@ const translations = {
     confirmAccusation: "تأكيد الاتهام النهائي",
     tabletAccuseHint: "هل وصلت إلى الحقيقة؟ افتح شاشة الاتهام واختر القاتل والدافع.",
     caseEndTitle: "ختام القضية",
+    gameCompleteTitle: "ختام التحقيق",
+    gameCompleteCongrats: "أحسنت أيها المحقق!",
+    gameCompleteMessage: "أنهيت جميع القضايا وأثبتّ جدارتك.",
+    gameCompleteStarsLabel: "مجموع أفضل النجوم",
+    gameCompleteStarsCount: "{stars} من {total} نجمة",
+    gameCompleteCasesLabel: "القضايا المكتملة",
+    gameCompleteCasesCount: "{completed} من {total}",
+    gameCompleteReplay: "إعادة أي قضية",
     caseEndSummaryTitle: "ملخص التحقيق",
     cluesFoundSummary: "الأدلة التي وجدتها: {found}/{total}",
     goodDecisionsSummary: "القرارات الصحيحة: {count}",
@@ -334,13 +362,23 @@ const translations = {
     resetCaseHint: "يمسح أدلة وإفادات وقرارات وتحاليل القضية الحالية فقط، ويحفظ الرتبة والنجوم والنتايج القديمة."
   },
   en: {
-    appTitle: "The Detective",
-    tagline: "Interactive criminal investigation game",
+    appTitle: "Killer's Secret",
+    gameLogoAlt: "Killer's Secret game logo",
+    tagline: "An Interactive Detective Game",
     startCase: "Start Case",
     continueGame: "Continue",
+    homeCrimeTape: "CRIME SCENE · DO NOT CROSS",
     languageToggle: "عربي",
     backHome: "Back Home",
     caseTitle: "Case Details",
+    caseSelectionTitle: "Choose a Case",
+    caseSelectionIntro: "Choose an unlocked case or start a random one.",
+    caseDifficulty: "Difficulty: Level {level}",
+    caseAvailable: "Available",
+    caseLocked: "Locked — earn at least one star on the previous case",
+    randomCase: "Random Case",
+    bodyScenePoint: "Body location",
+    observatorySceneAlt: "Crime scene inside the observatory",
     victim: "Victim",
     location: "Crime Scene",
     suspects: "Suspects",
@@ -443,6 +481,10 @@ const translations = {
     personality_nervous: "Nervous",
     personality_proud: "Proud",
     personality_calm: "Calm",
+    personality_arrogant: "Arrogant",
+    personality_evasive: "Evasive",
+    personality_remorseful: "Remorseful",
+    personality_ruthless: "Ruthless",
     category_alibi: "Alibi",
     category_relation: "Relation",
     category_motive: "Motive",
@@ -472,6 +514,10 @@ const translations = {
     taunt_nervous: "Wh.. what is this? This has nothing to do with me! Why are you trying to frame me?!",
     taunt_proud: "Do you think such trivialities faze me? I am not obliged to answer such nonsense.",
     taunt_calm: "This evidence has nothing to do with me whatsoever. I advise you to look elsewhere.",
+    taunt_arrogant: "Do you think such trivia diminishes my standing? I won't waste my time, come back with real proof.",
+    taunt_evasive: "This... I don't know where you got it, but it means nothing. Truly, nothing.",
+    taunt_remorseful: "Please... this has nothing to do with what happened, why are you being so harsh with me?",
+    taunt_ruthless: "Show me something real. This junk doesn't frighten a man like me.",
     labTitle: "Laboratory",
     labTabAnalyses: "Analyses",
     labTabAutopsy: "Forensics",
@@ -483,7 +529,7 @@ const translations = {
     labOpen: "Open Lab",
     labCapacity: "Lab capacity: {used}/{max}",
     labActionsTaken: "Actions taken: {count}",
-    labFull: "The lab is at full capacity. Wait for one of the two analyses to finish.",
+    labFull: "The lab is at full capacity. Wait for an analysis to finish.",
     labQueued: "Evidence sent to the lab.",
     labProgress: "Progress: {done}/{total}",
     labAnalysisReady: "Analysis complete: {name}",
@@ -520,6 +566,8 @@ const translations = {
     labLockedHint: "Inspect the body checkpoint at the crime scene, or complete {count} actions since the case began.",
     labUnlockProgress: "Actions: {done}/{total}",
     labAutopsyUnlocked: "The forensic report is now available in the lab.",
+    autopsyInProgress: "Forensic analysis in progress",
+    autopsyProgress: "Analysis progress",
     autopsyTitle: "Autopsy Report",
     autopsyCause: "Cause of Death",
     autopsyTime: "Estimated Time of Death",
@@ -554,6 +602,14 @@ const translations = {
     confirmAccusation: "Confirm Final Accusation",
     tabletAccuseHint: "Ready to reveal the truth? Open the accusation screen and choose the killer and motive.",
     caseEndTitle: "Case Closed",
+    gameCompleteTitle: "Investigation Complete",
+    gameCompleteCongrats: "Well done, Detective!",
+    gameCompleteMessage: "You solved every case and proved your skill.",
+    gameCompleteStarsLabel: "Total best stars",
+    gameCompleteStarsCount: "{stars} out of {total} stars",
+    gameCompleteCasesLabel: "Cases completed",
+    gameCompleteCasesCount: "{completed} of {total}",
+    gameCompleteReplay: "Replay Any Case",
     caseEndSummaryTitle: "Investigation Summary",
     cluesFoundSummary: "Clues found: {found}/{total}",
     goodDecisionsSummary: "Good decisions: {count}",
@@ -690,6 +746,7 @@ function setLanguage(lang) {
   if (translations[lang]) {
     currentLang = lang;
     localStorage.setItem("detective_lang", lang);
+    if (typeof updateTabletTime === "function") updateTabletTime();
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
     document.documentElement.lang = lang;
     updateAllTexts();
@@ -709,6 +766,8 @@ function setLanguage(lang) {
           ? getLatestCaseResult(gameState.currentCase.id)
           : null;
         if (latest) renderCaseEnd(latest);
+      } else if (gameState.currentScreen === "gameComplete" && typeof renderGameComplete === "function") {
+        renderGameComplete();
       }
       if (typeof renderTabletEvidence === "function") {
         renderTabletEvidence();
@@ -749,6 +808,9 @@ function updateAllTexts() {
   });
   document.querySelectorAll("[data-i18n-title]").forEach((el) => {
     el.title = t(el.getAttribute("data-i18n-title"));
+  });
+  document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
+    el.alt = t(el.getAttribute("data-i18n-alt"));
   });
   document.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
     el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria-label")));

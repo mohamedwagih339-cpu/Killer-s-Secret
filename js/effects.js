@@ -18,8 +18,21 @@ const fxState = {
   height: 0,
   dpr: 1,
   shakeTimer: null,
-  flashTimer: null
+  flashTimer: null,
+  sirenStartTimer: null,
+  sirenTimer: null,
+  ambientTimer: null,
+  ambientEndTimer: null,
+  ambientPreviousEffect: null,
+  ambientCurrentEffect: null
 };
+
+const FX_AMBIENT_EFFECTS = [
+  { name: "shadow", duration: 8000 },
+  { name: "lightning", duration: 1400 },
+  { name: "eyes", duration: 5000 },
+  { name: "paper", duration: 6500 }
+];
 
 function fxVisualsEnabled() {
   const settings = typeof getGameSettings === "function" ? getGameSettings() : null;
@@ -34,6 +47,64 @@ function fxMotionAllowed() {
   return fxVisualsEnabled() && !fxReducedMotion();
 }
 
+function fxAmbientStop() {
+  if (fxState.ambientTimer !== null) {
+    clearTimeout(fxState.ambientTimer);
+    fxState.ambientTimer = null;
+  }
+  if (fxState.ambientEndTimer !== null) {
+    clearTimeout(fxState.ambientEndTimer);
+    fxState.ambientEndTimer = null;
+  }
+  fxState.ambientCurrentEffect = null;
+  const backdrop = document.getElementById("ambient-backdrop");
+  if (backdrop) {
+    backdrop.classList.remove("is-active");
+    backdrop.removeAttribute("data-effect");
+  }
+}
+
+function fxAmbientScheduleNext() {
+  if (!fxMotionAllowed() || document.hidden || !document.getElementById("ambient-backdrop")) return;
+  if (fxState.ambientTimer !== null) return;
+
+  const minDelay = fxState.currentScreen === "home" ? 15000 : 40000;
+  const maxDelay = fxState.currentScreen === "home" ? 25000 : 70000;
+  const delay = minDelay + Math.random() * (maxDelay - minDelay);
+  fxState.ambientTimer = setTimeout(() => {
+    fxState.ambientTimer = null;
+    fxAmbientStart();
+  }, delay);
+}
+
+function fxAmbientStart() {
+  if (!fxMotionAllowed() || document.hidden) return;
+
+  const choices = FX_AMBIENT_EFFECTS.filter((effect) => effect.name !== fxState.ambientPreviousEffect);
+  const effect = choices[Math.floor(Math.random() * choices.length)];
+  const backdrop = document.getElementById("ambient-backdrop");
+  if (!effect || !backdrop) return;
+
+  fxState.ambientPreviousEffect = effect.name;
+  fxState.ambientCurrentEffect = effect.name;
+  backdrop.dataset.effect = effect.name;
+  backdrop.classList.add("is-active");
+  fxState.ambientEndTimer = setTimeout(() => {
+    fxState.ambientEndTimer = null;
+    fxState.ambientCurrentEffect = null;
+    backdrop.classList.remove("is-active");
+    backdrop.removeAttribute("data-effect");
+  }, effect.duration);
+  fxAmbientScheduleNext();
+}
+
+function fxAmbientUpdateScreen(name) {
+  const backdrop = document.getElementById("ambient-backdrop");
+  if (backdrop) backdrop.classList.toggle("is-home", name === "home");
+  fxAmbientStop();
+  fxAmbientScheduleNext();
+}
+
 // Applies the visual preference to the document and (re)starts or stops the
 // expensive canvas loop without losing the current screen.
 function applyEffectsSettings() {
@@ -42,14 +113,56 @@ function applyEffectsSettings() {
 
   if (!fxMotionAllowed()) {
     fxPauseCrimeScene();
+    fxStopPoliceSiren();
+    fxAmbientStop();
   } else if (fxState.currentScreen === "crimeScene" && !document.hidden) {
     fxStartCrimeScene();
   }
+  if (fxMotionAllowed()) fxAmbientScheduleNext();
+}
+
+function fxPoliceSiren(durationMs, startDelayMs) {
+  fxStopPoliceSiren();
+  if (!fxMotionAllowed() || document.hidden) return;
+
+  const duration = Number.isFinite(durationMs) && durationMs > 0 ? durationMs : 3000;
+  const delay = Number.isFinite(startDelayMs) && startDelayMs > 0 ? startDelayMs : 0;
+  const start = () => {
+    const lights = document.querySelector(".police-lights");
+    if (lights) lights.style.setProperty("--police-siren-duration", duration + "ms");
+    document.body.classList.add("police-siren");
+    fxState.sirenTimer = setTimeout(fxStopPoliceSiren, duration);
+  };
+
+  if (delay > 0) {
+    fxState.sirenStartTimer = setTimeout(() => {
+      fxState.sirenStartTimer = null;
+      start();
+    }, delay);
+  } else {
+    start();
+  }
+}
+
+function fxStopPoliceSiren() {
+  if (fxState.sirenStartTimer) {
+    clearTimeout(fxState.sirenStartTimer);
+    fxState.sirenStartTimer = null;
+  }
+  if (fxState.sirenTimer) {
+    clearTimeout(fxState.sirenTimer);
+    fxState.sirenTimer = null;
+  }
+  document.body.classList.remove("police-siren");
+  const lights = document.querySelector(".police-lights");
+  if (lights) lights.style.removeProperty("--police-siren-duration");
 }
 
 function fxHandleScreen(name) {
   fxState.currentScreen = name;
   document.body.classList.toggle("in-crime-scene", name === "crimeScene");
+  document.body.classList.toggle("in-interrogation", name === "interrogation");
+  fxAmbientUpdateScreen(name);
   if (name === "crimeScene") {
     fxStartCrimeScene();
   } else {
@@ -246,13 +359,20 @@ window.addEventListener("resize", () => {
 });
 
 document.addEventListener("visibilitychange", () => {
+  document.body.classList.toggle("tab-hidden", document.hidden);
   if (document.hidden) {
     fxPauseCrimeScene();
+    fxStopPoliceSiren();
+    fxAmbientStop();
   } else if (fxState.crimeSceneActive) {
     fxState.lastFrameTime = 0;
     if (!fxState.rafId) fxState.rafId = requestAnimationFrame(fxAnimateDust);
   }
+  if (!document.hidden) fxAmbientScheduleNext();
 });
+
+document.body.classList.toggle("tab-hidden", document.hidden);
+fxAmbientUpdateScreen(fxState.currentScreen);
 
 if (FX_REDUCED_MOTION_QUERY) {
   const onMotionPreferenceChange = () => applyEffectsSettings();

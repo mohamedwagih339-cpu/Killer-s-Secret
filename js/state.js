@@ -20,6 +20,7 @@ const gameState = {
   labReports: {},
   autopsyNotified: false,
   caseResults: [],
+  generatedCases: [],
   lastAccusation: null,
   caseCompleted: false,
   lastCaseScreen: null,
@@ -142,6 +143,7 @@ function loadState() {
       if (!gameState.labReports || typeof gameState.labReports !== "object") gameState.labReports = {};
       if (typeof gameState.autopsyNotified !== "boolean") gameState.autopsyNotified = false;
       if (!Array.isArray(gameState.caseResults)) gameState.caseResults = [];
+      if (!Array.isArray(gameState.generatedCases)) gameState.generatedCases = [];
       if (!gameState.lastAccusation || typeof gameState.lastAccusation !== "object") gameState.lastAccusation = null;
       // Older saves do not know whether the loaded case was already finished.
       if (typeof gameState.caseCompleted !== "boolean") {
@@ -187,6 +189,7 @@ function resetState() {
   gameState.labReports = {};
   gameState.autopsyNotified = false;
   gameState.caseResults = [];
+  gameState.generatedCases = [];
   gameState.lastAccusation = null;
   gameState.caseCompleted = false;
   gameState.lastCaseScreen = null;
