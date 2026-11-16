@@ -26,6 +26,8 @@ body {
 }
 
 .game-container {
+  position: relative;
+  z-index: 1;
   max-width: 720px;
   margin: 0 auto;
   padding: 16px;
@@ -301,6 +303,25 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 50%;
+}
+
+.checkpoint-body {
+  z-index: 1;
+  width: 38px;
+  height: 38px;
+  background: var(--danger);
+  box-shadow: 0 0 16px rgba(178, 58, 72, 0.85);
+}
+
+.checkpoint-body-marker {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 1.15rem;
+  line-height: 1;
+  pointer-events: none;
 }
 
 .checkpoint.searched .checkpoint-dot {
@@ -2589,6 +2610,70 @@ body.confirm-open {
   text-align: center;
 }
 
+.case-selection-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.case-selection-content > p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.case-selection-content > .btn {
+  margin: 0;
+}
+
+.case-selection-list {
+  display: grid;
+  gap: 12px;
+}
+
+.case-select-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, opacity 0.2s;
+}
+
+.case-select-card:not(:disabled):hover {
+  border-color: var(--accent);
+  background: var(--surface-hover);
+}
+
+.case-select-card:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.case-select-title {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.case-select-difficulty,
+.case-select-status {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.case-select-stars {
+  color: var(--accent);
+  direction: ltr;
+  letter-spacing: 3px;
+}
+
 .case-end-stars {
   display: flex;
   justify-content: center;
@@ -3167,6 +3252,82 @@ body.setup-active .tablet-toggle {
   }
 }
 
+.game-complete-header {
+  margin-block-end: 0;
+}
+
+.game-complete-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-block: 20px 40px;
+  text-align: center;
+}
+
+.game-complete-emblem {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  color: var(--accent);
+  font-size: 3rem;
+  text-shadow: 0 0 18px rgba(212, 160, 23, 0.6);
+  box-shadow: 0 0 32px rgba(212, 160, 23, 0.22);
+}
+
+.game-complete-content h3 {
+  margin: 0;
+  color: var(--accent);
+  font-size: 1.8rem;
+}
+
+.game-complete-content > p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.game-complete-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin-block: 8px;
+}
+
+.game-complete-stats > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.game-complete-stats span {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.game-complete-stats strong {
+  color: var(--accent);
+  font-size: 1.15rem;
+}
+
+.game-complete-content > .btn {
+  width: 100%;
+  margin: 0;
+}
+
+@media (max-width: 420px) {
+  .game-complete-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Case end rank feedback */
 
 .case-end-player {
@@ -3603,6 +3764,7 @@ body.fx-disabled .fx-flash {
   .fx-flash.active,
   #scene-popup.has-clue .popup-content,
   .checkpoint,
+  .police-light,
   .case-star.earned,
   .promotion-star.earned,
   .promotion-avatar,
@@ -3619,6 +3781,528 @@ body.fx-disabled .fx-flash {
   .skill-hint-item,
   .skill-connection-card,
   .checkpoint.skill-observation-hint {
+    animation: none !important;
+  }
+}
+
+/* Home investigation atmosphere */
+#screen-home {
+  position: relative;
+  isolation: isolate;
+  min-height: min(660px, calc(100vh - 100px));
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: clamp(16px, 4vw, 30px);
+  border: 1px solid rgba(126, 158, 203, 0.18);
+  border-radius: 24px;
+  background: transparent;
+}
+
+#screen-home .screen-header,
+#screen-home .screen-content {
+  position: relative;
+  z-index: 2;
+}
+
+#screen-home .detective-card {
+  background-color: rgba(15, 21, 31, 0.78);
+  backdrop-filter: blur(2px);
+}
+
+.home-investigation-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 14%, rgba(17, 47, 83, 0.72), transparent 68%),
+    linear-gradient(145deg, #080e19, #05070d 74%);
+}
+
+.home-investigation-backdrop::before,
+.home-investigation-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.home-investigation-backdrop::before {
+  background: radial-gradient(ellipse at 0% 0%, rgba(35, 115, 255, 0.32), transparent 43%);
+  animation: homeBluePulse 8s ease-in-out infinite;
+}
+
+.home-investigation-backdrop::after {
+  background: radial-gradient(ellipse at 100% 0%, rgba(255, 35, 58, 0.3), transparent 43%);
+  animation: homeRedPulse 8s 4s ease-in-out infinite;
+}
+
+.home-fingerprint {
+  position: absolute;
+  width: clamp(260px, 58vw, 500px);
+  height: auto;
+  left: 50%;
+  top: 50%;
+  color: #8db4ee;
+  opacity: 0.09;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  animation: fingerprintGlow 8s ease-in-out infinite alternate;
+}
+
+.home-fingerprint,
+.home-magnifier {
+  pointer-events: none;
+}
+
+.home-magnifier {
+  z-index: 1;
+}
+
+.home-magnifier {
+  position: absolute;
+  width: clamp(58px, 10vw, 90px);
+  height: auto;
+  left: 8%;
+  top: 20%;
+  color: #e9c56d;
+  opacity: 0.18;
+  animation: magnifierSweep 26s ease-in-out infinite alternate;
+}
+
+.home-crime-tape {
+  position: absolute;
+  z-index: 1;
+  inset-inline-start: -36%;
+  bottom: 2px;
+  width: 172%;
+  padding: 3px 0;
+  border-block: 2px solid rgba(18, 19, 15, 0.9);
+  background: repeating-linear-gradient(135deg, #eac53b 0 16px, #151611 16px 32px);
+  color: #fff3bf;
+  font: 700 0.78rem/1.5 Arial, sans-serif;
+  letter-spacing: 1px;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: -1px -1px 0 #17170f, 1px -1px 0 #17170f, -1px 1px 0 #17170f, 1px 1px 0 #17170f;
+  animation: tapeDrift 34s linear infinite alternate;
+}
+
+#screen-home .screen-header {
+  gap: 8px;
+}
+
+.home-brand {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  flex-direction: row;
+  gap: clamp(6px, 1.5vw, 12px);
+  min-width: 0;
+  direction: ltr;
+}
+
+#screen-home .home-brand h1 {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-size: clamp(1.05rem, 3.8vw, 2.1rem);
+  color: #e7bd53;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  text-shadow: 0 0 10px rgba(212, 160, 23, 0.26);
+  animation: brandSheen 5s ease-in-out infinite alternate;
+  white-space: nowrap;
+}
+
+.home-game-logo {
+  display: block;
+  width: 76px;
+  height: 76px;
+  flex: 0 1 76px;
+  min-width: 40px;
+  aspect-ratio: 1;
+  border: 2px solid rgba(212, 160, 23, 0.62);
+  border-radius: 50%;
+  clip-path: circle(47% at 50% 50%);
+  object-fit: cover;
+  object-position: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+#screen-home .screen-content > p:first-child {
+  direction: ltr;
+  margin: 0 0 16px;
+  color: #c4cfdf;
+  font-size: 0.92rem;
+  letter-spacing: 0.025em;
+  text-align: center;
+}
+
+#screen-home #btn-start-case,
+#screen-home #btn-continue,
+#screen-home #btn-new-profile {
+  animation: homeButtonGlow 4.5s ease-in-out infinite alternate;
+}
+
+@keyframes brandSheen {
+  from { text-shadow: 0 0 7px rgba(212, 160, 23, 0.18); }
+  to { text-shadow: 0 0 16px rgba(240, 192, 64, 0.42); }
+}
+
+@keyframes homeButtonGlow {
+  from { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22), 0 0 0 rgba(212, 160, 23, 0); }
+  to { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.26), 0 0 20px rgba(212, 160, 23, 0.22); }
+}
+
+@keyframes homeBluePulse {
+  0%, 42%, 100% { opacity: 0.72; }
+  50%, 92% { opacity: 0.06; }
+}
+
+@keyframes homeRedPulse {
+  0%, 42%, 100% { opacity: 0.06; }
+  50%, 92% { opacity: 0.72; }
+}
+
+body.in-crime-scene .home-investigation-backdrop::before {
+  animation-name: homeBluePulseQuiet;
+  animation-duration: 16s;
+}
+
+body.in-crime-scene .home-investigation-backdrop::after {
+  animation-name: homeRedPulseQuiet;
+  animation-duration: 16s;
+  animation-delay: 8s;
+}
+
+body.in-crime-scene .home-fingerprint,
+body.in-interrogation .home-fingerprint {
+  animation-name: fingerprintGlowQuiet;
+  animation-duration: 14s;
+}
+
+body.in-crime-scene .home-magnifier,
+body.in-interrogation .home-magnifier {
+  opacity: 0.08;
+  animation-duration: 42s;
+}
+
+body.in-interrogation .home-investigation-backdrop::before {
+  animation-name: homeBluePulseQuiet;
+  animation-duration: 18s;
+}
+
+body.in-interrogation .home-investigation-backdrop::after {
+  animation-name: homeRedPulseQuiet;
+  animation-duration: 18s;
+  animation-delay: 9s;
+}
+
+@keyframes homeBluePulseQuiet {
+  0%, 42%, 100% { opacity: 0.4; }
+  50%, 92% { opacity: 0.04; }
+}
+
+@keyframes homeRedPulseQuiet {
+  0%, 42%, 100% { opacity: 0.04; }
+  50%, 92% { opacity: 0.4; }
+}
+
+@keyframes fingerprintGlowQuiet {
+  from { opacity: 0.02; }
+  to { opacity: 0.06; }
+}
+
+@keyframes fingerprintGlow {
+  from { opacity: 0.04; }
+  to { opacity: 0.12; }
+}
+
+@keyframes magnifierSweep {
+  from { transform: translate(0, 0) rotate(-12deg); }
+  to { transform: translate(68vw, 34vh) rotate(24deg); }
+}
+
+@keyframes tapeDrift {
+  from { transform: translateX(-7%); }
+  to { transform: translateX(7%); }
+}
+
+/* Brief, alternating edge-only police lights paired with the siren sound file. */
+.police-lights {
+  position: fixed;
+  inset: 0;
+  z-index: 9995;
+  pointer-events: none;
+  display: none;
+}
+
+body.police-siren .police-lights {
+  display: block;
+  animation: policeLightsFade var(--police-siren-duration, 3s) linear forwards;
+}
+
+.police-light {
+  position: absolute;
+  top: -12%;
+  width: 88%;
+  height: 82%;
+  border-radius: 50%;
+  filter: blur(58px);
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+
+.police-light-blue {
+  left: -22%;
+  background: radial-gradient(ellipse, rgba(30, 108, 255, 0.72), transparent 72%);
+  animation: policeLightPulse 0.7s ease-in-out infinite;
+}
+
+.police-light-red {
+  right: -22%;
+  background: radial-gradient(ellipse, rgba(255, 30, 50, 0.9), transparent 72%);
+  animation: policeLightPulse 0.7s 0.35s ease-in-out infinite;
+}
+
+@keyframes policeLightPulse {
+  0% { opacity: 0; }
+  10%, 45% { opacity: 1; }
+  55%, 100% { opacity: 0; }
+}
+
+@keyframes policeLightsFade {
+  0%, 80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Slim metallic detective tablet with a blue glass display. */
+.tablet-body {
+  padding: 7px;
+  border: 1px solid #9aa8b8;
+  border-radius: 25px;
+  background: linear-gradient(145deg, #e2e8ee 0%, #687585 8%, #171f2a 13%, #050a12 88%, #9da8b4 100%);
+  box-shadow:
+    0 28px 65px rgba(0, 0, 0, 0.72),
+    0 4px 12px rgba(196, 214, 235, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.tablet-body::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 6px;
+  height: 6px;
+  top: 2px;
+  left: 50%;
+  border: 1px solid rgba(138, 178, 215, 0.75);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #668bb4, #101722 72%);
+  box-shadow: 0 0 3px rgba(100, 160, 220, 0.45);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.tablet-status {
+  min-height: 28px;
+  box-sizing: border-box;
+  padding: 9px 13px 6px;
+  border: 0;
+  background: linear-gradient(100deg, #071423, #10243a 52%, #071423);
+  color: #d7e5f4;
+  font-variant-numeric: tabular-nums;
+}
+
+.tablet-status-indicators {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-inline-start: auto;
+  margin-inline-end: 10px;
+  color: #d7e5f4;
+  font: 600 0.68rem/1 Arial, sans-serif;
+}
+
+.tablet-battery {
+  width: 23px;
+  height: 13px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.tablet-battery-charge {
+  fill: #72d995;
+  stroke: none;
+}
+
+.tablet-home,
+.tablet-app-screen {
+  background:
+    linear-gradient(135deg, rgba(97, 158, 223, 0.1), transparent 38%),
+    linear-gradient(155deg, #10243b, #071321 68%, #091a2b);
+}
+
+.tablet-home {
+  border-radius: 0 0 18px 18px;
+}
+
+.tablet-home h2 {
+  text-shadow: 0 0 18px rgba(63, 143, 228, 0.3);
+}
+
+.tablet-apps {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.tablet-app {
+  min-width: 0;
+  min-height: 94px;
+  padding: 9px 5px;
+  border: 1px solid rgba(146, 183, 221, 0.22);
+  border-radius: 15px;
+  background: linear-gradient(155deg, rgba(38, 59, 85, 0.86), rgba(13, 27, 44, 0.94));
+  color: #f0f5fb;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.24), inset 0 1px rgba(255, 255, 255, 0.07);
+}
+
+.tablet-app:hover {
+  border-color: var(--app-icon-color, #d4a017);
+  transform: translateY(-2px);
+}
+
+.tablet-app span {
+  max-width: 100%;
+}
+
+.tablet-app-icon {
+  display: block;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.32));
+}
+
+.app-evidence { --app-icon-color: #35a7ff; }
+.app-suspects { --app-icon-color: #ff7a90; }
+.app-notes { --app-icon-color: #ffd166; }
+.app-lab { --app-icon-color: #63d6bd; }
+.app-skills { --app-icon-color: #f5a623; }
+.app-accuse { --app-icon-color: #ff5d68; }
+
+.tablet-app-screen {
+  border-radius: 0 0 18px 18px;
+}
+
+/* Forensic scan and report reveal. */
+.lab-job {
+  position: relative;
+  overflow: hidden;
+}
+
+.lab-job > * {
+  position: relative;
+  z-index: 1;
+}
+
+.lab-job::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset-block: 0;
+  left: -30%;
+  width: 22%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(83, 190, 245, 0.16), transparent);
+  animation: labScanSweep 3.6s ease-in-out infinite;
+}
+
+.lab-report,
+.autopsy-card {
+  animation: reportReveal 0.42s ease-out both;
+}
+
+.lab-report:nth-child(2),
+.autopsy-card:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+@keyframes labScanSweep {
+  from { transform: translateX(-40%); }
+  to { transform: translateX(640%); }
+}
+
+@keyframes reportReveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 599px) {
+  #screen-home {
+    min-height: calc(100dvh - 84px);
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .tablet-body {
+    border-radius: 24px;
+  }
+
+  .tablet-apps {
+    gap: 8px;
+  }
+}
+
+body.fx-disabled .home-investigation-backdrop *,
+body.fx-disabled .home-investigation-backdrop::before,
+body.fx-disabled .home-investigation-backdrop::after,
+body.fx-disabled .lab-job::after,
+body.fx-disabled .lab-report,
+body.fx-disabled .autopsy-card,
+body.fx-reduced .home-investigation-backdrop *,
+body.fx-reduced .home-investigation-backdrop::before,
+body.fx-reduced .home-investigation-backdrop::after,
+body.fx-reduced .lab-job::after,
+body.fx-reduced .lab-report,
+body.fx-reduced .autopsy-card,
+body.tab-hidden .home-investigation-backdrop *,
+body.tab-hidden .home-investigation-backdrop::before,
+body.tab-hidden .home-investigation-backdrop::after,
+body.tab-hidden .lab-job::after,
+body.tab-hidden .lab-report,
+body.tab-hidden .autopsy-card {
+  animation: none !important;
+}
+
+body.fx-disabled .police-lights,
+body.fx-reduced .police-lights,
+body.tab-hidden .police-lights {
+  display: none !important;
+}
+
+body.fx-disabled .screen.active,
+body.fx-reduced .screen.active,
+body.tab-hidden .screen.active {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-investigation-backdrop *,
+  .home-investigation-backdrop::before,
+  .home-investigation-backdrop::after,
+  .lab-job::after,
+  .lab-report,
+  .autopsy-card {
     animation: none !important;
   }
 }
@@ -3660,5 +4344,439 @@ body.fx-disabled .fx-flash {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Persistent background shared by every game screen. */
+.home-investigation-backdrop {
+  z-index: 0;
+}
+
+.game-container .screen {
+  position: relative;
+}
+
+/* Keep the investigation atmosphere quieter on evidence-focused screens. */
+body.in-crime-scene .home-investigation-backdrop,
+body.in-interrogation .home-investigation-backdrop {
+  filter: saturate(0.78);
+}
+
+.ambient-backdrop {
+  --ambient-peak: 0.1;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ambient-backdrop.is-home {
+  --ambient-peak: 0.42;
+}
+
+.ambient-visual {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.ambient-effect {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ambient-backdrop.is-active[data-effect="shadow"] .ambient-effect--shadow {
+  visibility: visible;
+  filter: blur(3px) drop-shadow(0 0 14px rgba(110, 132, 160, 0.16));
+  animation: ambientShadowPass 8s ease-in-out forwards;
+}
+
+.ambient-backdrop.is-active[data-effect="lightning"] .ambient-effect--lightning {
+  visibility: visible;
+  animation: ambientLightning 1.4s ease-out forwards;
+}
+
+.ambient-backdrop.is-active[data-effect="eyes"] .ambient-effect--eyes {
+  visibility: visible;
+  filter: drop-shadow(0 0 18px rgba(238, 193, 91, 0.85));
+  animation: ambientEyes 5s ease-in-out forwards;
+}
+
+.ambient-backdrop.is-active[data-effect="paper"] .ambient-effect--paper {
+  visibility: visible;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ambientPaperDrift 6.5s ease-in-out forwards;
+}
+
+@keyframes ambientShadowPass {
+  0% { opacity: 0; transform: translateX(-125vw); }
+  18%, 78% { opacity: var(--ambient-peak); }
+  100% { opacity: 0; transform: translateX(125vw); }
+}
+
+@keyframes ambientLightning {
+  0%, 100% { opacity: 0; }
+  8%, 22% { opacity: calc(var(--ambient-peak) * 0.65); }
+  15%, 42% { opacity: 0; }
+}
+
+@keyframes ambientEyes {
+  0%, 12%, 92%, 100% { opacity: 0; }
+  26%, 78% { opacity: var(--ambient-peak); }
+}
+
+@keyframes ambientPaperDrift {
+  0% { opacity: 0; transform: translate(125vw, -4vh) rotate(18deg); }
+  16%, 78% { opacity: var(--ambient-peak); }
+  100% { opacity: 0; transform: translate(-125vw, 8vh) rotate(-24deg); }
+}
+
+body.fx-disabled .ambient-backdrop,
+body.fx-reduced .ambient-backdrop,
+body.tab-hidden .ambient-backdrop {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-backdrop * {
+    animation: none !important;
+  }
+}
+
+
+
+/* The launcher stays visible and readable while retaining its location. */
+.tablet-toggle {
+  width: auto;
+  min-width: 168px;
+  height: 56px;
+  gap: 9px;
+  padding: 5px 12px;
+  border: 1px solid #9aa8b8;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #dce5ed 0%, #35475b 9%, #101b2a 22%, #0b1522 100%);
+  color: #eef4fa;
+  font-size: 0.78rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.48), inset 0 1px rgba(255, 255, 255, 0.22);
+}
+
+.tablet-toggle.tablet-open {
+  width: auto;
+  min-width: 168px;
+  padding: 5px 12px;
+  border-color: #9aa8b8;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #dce5ed 0%, #35475b 9%, #101b2a 22%, #0b1522 100%);
+}
+
+.tablet-toggle .tablet-toggle-icon,
+.tablet-toggle.tablet-open .tablet-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 30px;
+  flex: 0 0 auto;
+  font-size: 0;
+}
+
+.tablet-toggle-icon svg {
+  display: block;
+  width: 34px;
+  height: 28px;
+}
+
+.tablet-toggle .tablet-toggle-label,
+.tablet-toggle.tablet-open .tablet-toggle-label {
+  display: inline;
+  color: #eef4fa;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* The forensic report opens with a restrained scan and sequential reveal. */
+.autopsy-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.autopsy-card:first-child::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: -18%;
+  width: 16%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(97, 190, 235, 0.17), transparent);
+  animation: autopsyScanSweep 1.3s ease-in-out both;
+}
+
+.autopsy-card:first-child h4,
+.autopsy-card:first-child .autopsy-row,
+.autopsy-card:first-child h5,
+.autopsy-card:first-child .autopsy-findings li {
+  animation: autopsyTextReveal 0.48s ease-out both;
+}
+
+.autopsy-card:first-child .autopsy-row:nth-of-type(2) {
+  animation-delay: 0.12s;
+}
+
+.autopsy-card:first-child .autopsy-row:nth-of-type(3) {
+  animation-delay: 0.24s;
+}
+
+.autopsy-card:first-child h5 {
+  animation-delay: 0.34s;
+}
+
+.autopsy-card:first-child .autopsy-findings li:nth-child(1) { animation-delay: 0.42s; }
+.autopsy-card:first-child .autopsy-findings li:nth-child(2) { animation-delay: 0.52s; }
+.autopsy-card:first-child .autopsy-findings li:nth-child(3) { animation-delay: 0.62s; }
+
+@keyframes autopsyScanSweep {
+  from { transform: translateX(-20%); opacity: 0; }
+  20% { opacity: 1; }
+  to { transform: translateX(760%); opacity: 0; }
+}
+
+@keyframes autopsyTextReveal {
+  from { opacity: 0.15; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 599px) {
+  .tablet-toggle,
+  .tablet-toggle.tablet-open {
+    width: auto;
+    min-width: 150px;
+    height: 48px;
+    padding: 4px 9px;
+    border-radius: 13px;
+  }
+
+  .tablet-toggle .tablet-toggle-label,
+  .tablet-toggle.tablet-open .tablet-toggle-label {
+    font-size: 0.72rem;
+  }
+
+  .home-game-logo {
+    width: 52px;
+    height: 52px;
+    flex-basis: 52px;
+  }
+}
+
+@media (max-width: 380px) {
+  .home-game-logo {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+  }
+
+  #screen-home .home-brand h1 {
+    font-size: clamp(0.9rem, 4.65vw, 1.05rem);
+  }
+}
+
+body.fx-disabled .home-crime-tape,
+body.fx-disabled #screen-home .screen-header h1,
+body.fx-disabled #screen-home #btn-start-case,
+body.fx-disabled #screen-home #btn-continue,
+body.fx-disabled #screen-home #btn-new-profile,
+body.fx-disabled .autopsy-card::after,
+body.fx-disabled .autopsy-card:first-child *,
+body.fx-reduced .home-crime-tape,
+body.fx-reduced #screen-home .screen-header h1,
+body.fx-reduced #screen-home #btn-start-case,
+body.fx-reduced #screen-home #btn-continue,
+body.fx-reduced #screen-home #btn-new-profile,
+body.fx-reduced .autopsy-card::after,
+body.fx-reduced .autopsy-card:first-child *,
+body.tab-hidden .home-crime-tape,
+body.tab-hidden #screen-home .screen-header h1,
+body.tab-hidden #screen-home #btn-start-case,
+body.tab-hidden #screen-home #btn-continue,
+body.tab-hidden #screen-home #btn-new-profile,
+body.tab-hidden .autopsy-card::after,
+body.tab-hidden .autopsy-card:first-child * {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-crime-tape,
+  #screen-home .screen-header h1,
+  #screen-home #btn-start-case,
+  #screen-home #btn-continue,
+  #screen-home #btn-new-profile,
+  .autopsy-card::after,
+  .autopsy-card:first-child * {
+    animation: none !important;
+  }
+}
+
+.lab-jobs,
+.lab-reports {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.autopsy-progress-scene {
+  overflow: hidden;
+  padding: 12px;
+  border: 1px solid rgba(212, 160, 23, 0.4);
+  border-radius: 12px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(52, 94, 132, 0.3), transparent 60%),
+    linear-gradient(145deg, #121b28, #09111b);
+  transition: opacity 0.42s ease, transform 0.42s ease;
+}
+
+.autopsy-progress-scene.is-finishing {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.autopsy-progress-title {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.autopsy-progress-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.autopsy-lamp-head {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: autopsyLampSwing 4.8s ease-in-out infinite alternate;
+}
+
+.autopsy-lamp-beam,
+.autopsy-flashlight-beam {
+  animation: autopsyBeamGlow 3.2s ease-in-out infinite alternate;
+}
+
+.autopsy-hand-left,
+.autopsy-hand-right {
+  transform-box: fill-box;
+  transform-origin: 50% 18%;
+}
+
+.autopsy-hand-left {
+  animation: autopsyHandLeft 4.6s ease-in-out infinite alternate;
+}
+
+.autopsy-hand-right {
+  animation: autopsyHandRight 5.2s ease-in-out infinite alternate;
+}
+
+.autopsy-tool-lens {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: autopsyLensTilt 4.4s ease-in-out infinite alternate;
+}
+
+.autopsy-progress-caption {
+  margin: 7px 0 5px;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+}
+
+.autopsy-progress-track {
+  width: 100%;
+  height: 9px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #070b11;
+  direction: ltr;
+}
+
+.autopsy-progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #287eb4, #d4a017);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left center;
+  animation: autopsyProgress 20s linear both;
+}
+
+@keyframes autopsyLampSwing {
+  from { transform: rotate(-2deg); }
+  to { transform: rotate(2deg); }
+}
+
+@keyframes autopsyBeamGlow {
+  from { opacity: 0.2; }
+  to { opacity: 0.48; }
+}
+
+@keyframes autopsyHandLeft {
+  from { transform: translate(-2px, 0) rotate(-1deg); }
+  to { transform: translate(10px, -4px) rotate(5deg); }
+}
+
+@keyframes autopsyHandRight {
+  from { transform: translate(2px, -1px) rotate(2deg); }
+  to { transform: translate(-10px, -5px) rotate(-5deg); }
+}
+
+@keyframes autopsyLensTilt {
+  from { transform: rotate(-8deg); }
+  to { transform: rotate(8deg); }
+}
+
+@keyframes autopsyProgress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+body.fx-disabled .autopsy-progress-scene *,
+body.fx-reduced .autopsy-progress-scene *,
+body.tab-hidden .autopsy-progress-scene * {
+  animation: none !important;
+}
+
+body.fx-disabled .autopsy-progress-scene,
+body.fx-reduced .autopsy-progress-scene,
+body.tab-hidden .autopsy-progress-scene {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .autopsy-progress-scene *,
+  .autopsy-progress-scene::before,
+  .autopsy-progress-scene::after {
+    animation: none !important;
+  }
+
+  .autopsy-progress-scene {
+    transition: none;
+  }
+}
+
+@media (max-width: 599px) {
+  #lab-jobs .lab-job {
+    padding: 8px 10px;
+    gap: 5px;
+  }
+
+  .autopsy-progress-scene {
+    padding: 9px;
   }
 }
