@@ -3,28 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>المحقق - The Detective</title>
-  <link rel="icon" href="data:,">
+  <title>Killer's Secret</title>
+  <link rel="icon" type="image/jpeg" href="game-logo.jpg">
+  <link rel="apple-touch-icon" href="game-logo.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <div class="home-investigation-backdrop" aria-hidden="true">
+    <svg class="home-fingerprint" viewBox="0 0 220 260" role="presentation">
+      <path d="M110 18C58 18 25 57 25 107c0 25 7 42 13 61m72-126c-38 0-63 28-63 65 0 25 8 45 12 68m51-107c-23 0-39 17-39 42 0 28 8 50 9 78m30-93c-10 0-17 8-17 20 0 32 8 56 7 92m18-111c20 0 34 15 34 38 0 31-7 51-8 76m-26-114c36 0 60 28 60 65 0 27-6 44-11 63m-49-151c52 0 85 39 85 89 0 23-5 41-13 62M74 225c-9-24-15-47-15-75m96 72c8-20 13-38 15-57m-66 87c-4-18-6-34-6-50"
+        fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" />
+    </svg>
+    <svg class="home-magnifier" viewBox="0 0 100 100" role="presentation">
+      <circle cx="40" cy="40" r="25" fill="none" stroke="currentColor" stroke-width="8" />
+      <path d="M58 59 84 85" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round" />
+      <circle cx="40" cy="40" r="17" fill="currentColor" opacity=".12" />
+    </svg>
+  </div>
+  <div id="ambient-backdrop" class="ambient-backdrop" aria-hidden="true">
+    <svg class="ambient-visual" viewBox="0 0 1000 800" preserveAspectRatio="none" focusable="false">
+      <g class="ambient-effect ambient-effect--shadow">
+        <ellipse cx="500" cy="170" rx="54" ry="68" fill="#24354a" stroke="#71839a" stroke-opacity=".24" stroke-width="7" />
+        <path d="M464 225h72l18 57 70 42 39 116-36 19-44-78-12 162 44 215H390l44-215-12-162-44 78-36-19 39-116 70-42z"
+          fill="#19283a" stroke="#71839a" stroke-opacity=".18" stroke-width="8" />
+        <path d="M460 285h80l-14 186h-52z" fill="#0d1520" opacity=".8" />
+      </g>
+      <g class="ambient-effect ambient-effect--lightning">
+        <rect width="1000" height="800" fill="#9bbce5" opacity=".55" />
+        <path d="m664 32-151 362h92l-91 340 226-438h-111l119-264z" fill="#eff7ff" opacity=".88" />
+      </g>
+      <g class="ambient-effect ambient-effect--eyes">
+        <path d="M22 420q34-37 68 0-34 37-68 0m75 0q34-37 68 0-34 37-68 0" fill="#d9b866" />
+        <ellipse cx="56" cy="420" rx="6" ry="16" fill="#11100b" />
+        <ellipse cx="131" cy="420" rx="6" ry="16" fill="#11100b" />
+        <circle cx="53" cy="415" r="3" fill="#fff1bc" />
+        <circle cx="128" cy="415" r="3" fill="#fff1bc" />
+      </g>
+      <g class="ambient-effect ambient-effect--paper">
+        <path d="m0 0 58 8-7 74-59-7z" fill="#d9d0b4" stroke="#84795f" stroke-width="3" />
+        <path d="m0 0 18 2-2 20-18-2z" fill="#f2ead3" />
+        <path d="m7 34 35 4m-37 9 31 4m-32 9 26 3" fill="none" stroke="#777364" stroke-width="2" opacity=".8" />
+      </g>
+    </svg>
+  </div>
   <div class="game-container">
     <!-- Home Screen -->
     <section id="screen-home" class="screen active">
+      <div class="home-crime-tape" data-i18n="homeCrimeTape"></div>
       <header class="screen-header">
-        <h1 data-i18n="appTitle">المحقق</h1>
+        <div class="home-brand" dir="ltr">
+          <h1 data-i18n="appTitle" dir="ltr">Killer's Secret</h1>
+          <img class="home-game-logo" src="game-logo.jpg" data-i18n-alt="gameLogoAlt" data-i18n-aria-label="gameLogoAlt" alt="Killer's Secret game logo">
+        </div>
         <button id="btn-language" class="btn-lang" data-i18n="languageToggle">English</button>
       </header>
       <main class="screen-content">
-        <p data-i18n="tagline">لعبة تحقيق جنائي تفاعلية</p>
+        <p data-i18n="tagline">An Interactive Detective Game</p>
         <div id="home-rank-card" class="detective-card hidden"></div>
         <button id="btn-start-case" class="btn btn-primary" data-i18n="startCase">ابدأ القضية</button>
         <button id="btn-continue" class="btn btn-secondary" data-i18n="continueGame" style="display:none;">متابعة</button>
         <button id="btn-reset-case-home" class="btn btn-reset-case" data-i18n="resetCurrentCase" style="display:none;">إعادة القضية الحالية</button>
         <button id="btn-new-profile" class="btn btn-secondary" data-i18n="newProfile">ملف جديد</button>
+      </main>
+    </section>
+
+    <!-- Case Selection Screen -->
+    <section id="screen-caseSelect" class="screen hidden">
+      <header class="screen-header">
+        <h2 data-i18n="caseSelectionTitle">اختيار قضية</h2>
+        <button id="btn-case-select-home" class="btn-back" data-i18n="backHome">العودة للرئيسية</button>
+        <button class="btn-lang" data-i18n="languageToggle">English</button>
+      </header>
+      <main class="screen-content case-selection-content">
+        <p data-i18n="caseSelectionIntro">اختر قضية مفتوحة أو ابدأ قضية عشوائية.</p>
+        <button id="btn-case-random" class="btn btn-primary" data-i18n="randomCase">قضية عشوائية</button>
+        <div id="case-selection-list" class="case-selection-list"></div>
       </main>
     </section>
 
@@ -232,25 +288,761 @@
       <main class="screen-content crime-scene-content">
         <div class="scene-wrapper" id="scene-wrapper">
           <div class="scene-container" id="scene-container">
-            <svg class="scene-svg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" aria-label="Crime scene office">
+            <svg class="scene-svg" data-scene="office" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" aria-label="Crime scene office">
               <defs>
                 <linearGradient id="wallGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" style="stop-color:#2a2d38;stop-opacity:1" />
-                  <stop offset="100%" style="stop-color:#1e212a;stop-opacity:1" />
+                  <stop offset="0%" stop-color="#293b52" />
+                  <stop offset="100%" stop-color="#172334" />
+                </linearGradient>
+                <linearGradient id="officeFloorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#283443" />
+                  <stop offset="100%" stop-color="#101720" />
+                </linearGradient>
+                <linearGradient id="officeRugGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#33445a" />
+                  <stop offset="100%" stop-color="#182536" />
+                </linearGradient>
+                <linearGradient id="officeDeskGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#9a6638" />
+                  <stop offset="100%" stop-color="#50351f" />
+                </linearGradient>
+                <linearGradient id="officeWindowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#10253c" />
+                  <stop offset="100%" stop-color="#37607b" />
+                </linearGradient>
+                <linearGradient id="officeCurtainGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#202b3c" />
+                  <stop offset="50%" stop-color="#45516a" />
+                  <stop offset="100%" stop-color="#1b2636" />
+                </linearGradient>
+                <filter id="officeSoftShadow" x="-30%" y="-30%" width="160%" height="170%">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="7" />
+                  <feOffset dy="7" />
+                  <feComponentTransfer><feFuncA type="linear" slope=".28" /></feComponentTransfer>
+                  <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+              </defs>
+              <rect width="1000" height="440" fill="url(#wallGrad)" />
+              <path d="M0 82h1000M0 422h1000" stroke="#66758a" stroke-opacity=".22" stroke-width="3" />
+              <path d="M42 0v430M958 0v430" stroke="#101a27" stroke-opacity=".3" stroke-width="8" />
+              <path d="M0 441h1000v259H0z" fill="url(#officeFloorGrad)" />
+              <path d="M0 492h1000M0 555h1000M0 622h1000M0 675h1000" stroke="#8793a1" stroke-opacity=".1" stroke-width="2" />
+              <path d="M115 442v258m180-258v258m210-258v258m230-258v258m165-258v258" stroke="#8793a1" stroke-opacity=".08" stroke-width="2" />
+
+              <ellipse cx="505" cy="512" rx="340" ry="125" fill="#050a10" opacity=".34" />
+              <rect x="195" y="395" width="620" height="225" rx="14" fill="url(#officeRugGrad)" stroke="#71839a" stroke-opacity=".45" stroke-width="4" />
+              <rect x="211" y="411" width="588" height="193" rx="10" fill="none" stroke="#d4a017" stroke-opacity=".3" stroke-width="3" />
+              <path d="M228 428h555M228 586h555" stroke="#b9c9d8" stroke-opacity=".12" stroke-width="2" />
+
+              <g filter="url(#officeSoftShadow)">
+                <rect x="88" y="121" width="213" height="181" rx="5" fill="#111b28" stroke="#a9b5c3" stroke-width="8" />
+                <rect x="101" y="134" width="187" height="155" fill="url(#officeWindowGrad)" />
+                <path d="M101 241h187m-140-107v155m64-155v155" stroke="#9eabb9" stroke-opacity=".6" stroke-width="5" />
+                <path d="M103 252h184M105 266h180" stroke="#d2a95d" stroke-opacity=".45" stroke-width="2" />
+                <path d="M90 117q25 12 27 37v148q-22-9-28-30Z" fill="url(#officeCurtainGrad)" />
+                <path d="M300 117q-25 12-27 37v148q22-9 28-30Z" fill="url(#officeCurtainGrad)" />
+                <path d="M97 151q13 5 17 20m180-20q-13 5-17 20" fill="none" stroke="#a7b3c1" stroke-opacity=".45" stroke-width="4" />
+              </g>
+              <path d="M286 119v177" stroke="#d4a017" stroke-opacity=".55" stroke-width="3" />
+
+              <g filter="url(#officeSoftShadow)">
+                <rect x="803" y="137" width="151" height="226" rx="5" fill="#3b2b21" stroke="#a57847" stroke-width="5" />
+                <rect x="817" y="151" width="123" height="198" fill="#172334" />
+                <path d="M817 214h123m-123 68h123" stroke="#a57847" stroke-width="7" />
+                <path d="M827 154v57m16-57v57m17-57v57m19-57v57m24-57v57" stroke="#d8bd8b" stroke-width="8" stroke-linecap="round" />
+                <path d="M826 220v60m19-60v60m20-60v60m24-60v60m22-60v60" stroke="#89a2b9" stroke-width="8" stroke-linecap="round" />
+                <path d="M828 286v58m17-58v58m22-58v58m22-58v58m23-58v58" stroke="#d4a017" stroke-width="8" stroke-linecap="round" />
+              </g>
+
+              <g filter="url(#officeSoftShadow)">
+                <rect x="133" y="313" width="174" height="133" rx="6" fill="#392b23" stroke="#a57847" stroke-width="5" />
+                <path d="M143 356h154m-78-39v82m-76 6h154" stroke="#704d34" stroke-width="5" />
+                <circle cx="221" cy="344" r="4" fill="#e0c58f" />
+                <circle cx="221" cy="400" r="4" fill="#e0c58f" />
+                <rect x="683" y="325" width="78" height="88" rx="7" fill="#586474" stroke="#b4c0cb" stroke-width="4" />
+                <rect x="693" y="337" width="58" height="64" rx="4" fill="#263345" stroke="#8594a4" stroke-width="2" />
+                <circle cx="739" cy="369" r="5" fill="#d4a017" />
+                <circle cx="706" cy="350" r="3" fill="#dbe4eb" />
+                <circle cx="738" cy="350" r="3" fill="#dbe4eb" />
+                <circle cx="706" cy="389" r="3" fill="#dbe4eb" />
+                <circle cx="738" cy="389" r="3" fill="#dbe4eb" />
+              </g>
+
+              <g filter="url(#officeSoftShadow)">
+                <rect x="425" y="207" width="150" height="82" rx="7" fill="#111923" stroke="#a3b2c2" stroke-width="4" />
+                <rect x="435" y="217" width="130" height="61" rx="3" fill="#17344a" />
+                <path d="M449 264q28-30 52-5t47-20" fill="none" stroke="#79bad7" stroke-width="3" />
+                <path d="M487 290h28v12h-28zM475 302h52v5h-52z" fill="#a3b2c2" />
+              </g>
+
+              <ellipse cx="500" cy="370" rx="216" ry="31" fill="#070b10" opacity=".4" />
+              <g filter="url(#officeSoftShadow)">
+                <path d="M312 300q14-19 34-19h322q23 0 35 19l-16 51H327Z" fill="url(#officeDeskGrad)" stroke="#d0a16b" stroke-width="5" />
+                <path d="M330 342h356v47H330z" fill="#68462c" stroke="#b17b49" stroke-width="4" />
+                <path d="M350 390v67m315-67v67" stroke="#563922" stroke-width="16" stroke-linecap="round" />
+                <rect x="359" y="351" width="112" height="30" rx="4" fill="#805735" stroke="#c28e56" stroke-width="3" />
+                <rect x="490" y="351" width="105" height="30" rx="4" fill="#805735" stroke="#c28e56" stroke-width="3" />
+                <path d="M408 366h17m108 0h17" stroke="#e1c28e" stroke-width="4" stroke-linecap="round" />
+                <path d="M367 290h80l-7 11h-74z" fill="#e7dfc8" transform="rotate(-5 407 295)" />
+                <path d="M379 291h49m-46 4h39" stroke="#536579" stroke-width="2" transform="rotate(-5 407 295)" />
+                <path d="M503 294h50l-5 8h-50z" fill="#d8e2e8" transform="rotate(5 528 298)" />
+                <path d="M510 297h31" stroke="#62839a" stroke-width="2" transform="rotate(5 528 298)" />
+                <path d="M560 281q14-10 29 0l6 19h-40z" fill="#202c39" stroke="#c4d2de" stroke-width="3" />
+                <path d="M566 282h16m-8-2v13" stroke="#7ab4d1" stroke-width="2" />
+              </g>
+
+              <g filter="url(#officeSoftShadow)">
+                <path d="M585 386q35-18 68 0v28q-32 19-68 0z" fill="#293849" stroke="#b2bfcc" stroke-width="4" />
+                <path d="M593 371q4-27 25-27t25 27v18h-50z" fill="#34485c" stroke="#b2bfcc" stroke-width="4" />
+                <path d="M594 414v42m49-42v42m-55 0h60" stroke="#9daab7" stroke-width="5" stroke-linecap="round" />
+              </g>
+
+              <g fill="none" stroke="#dce6ee" stroke-linecap="round" stroke-linejoin="round" opacity=".78">
+                <path d="M337 433q14-12 30-7 16-7 31 1l17 15-8 20-12-7-10 29 17 15-8 9-27-15-9-23-14 25-25 7-5-10 18-14 8-30-14 9-13-8Z"
+                  stroke-width="5" stroke-dasharray="11 7" />
+                <circle cx="353" cy="427" r="15" stroke-width="4" stroke-dasharray="7 5" />
+                <path d="m329 446-16 12m82 2 17 13" stroke-width="4" stroke-dasharray="6 6" />
+              </g>
+
+              <g filter="url(#officeSoftShadow)">
+                <path d="M789 481h62l-7 58q-24 14-48 0z" fill="#273646" stroke="#bcc8d2" stroke-width="4" />
+                <ellipse cx="820" cy="482" rx="31" ry="8" fill="#536477" stroke="#bcc8d2" stroke-width="4" />
+                <path d="M802 496q18 5 36 0m-34 10q16 5 32 0m-24 22v-12m16 12v-12" fill="none" stroke="#d6e0e8" stroke-opacity=".65" stroke-width="2" />
+              </g>
+
+              <g fill="#e7dfc8" stroke="#b6a991" stroke-width="2">
+                <path d="m670 451 33-5 6 25-33 4z" />
+                <path d="m704 454 22 3-4 18-22-3z" />
+                <path d="m684 474 25-4 4 15-25 4z" />
+              </g>
+              <path d="M675 458h20m-16 5h16m18-1h8" stroke="#78879a" stroke-width="2" />
+
+              <g filter="url(#officeSoftShadow)">
+                <rect x="278" y="497" width="60" height="42" rx="4" fill="#354354" stroke="#bbc7d1" stroke-width="4" />
+                <path d="M286 506h44m-44 7h44m-44 7h44m-44 7h44" stroke="#b9c5d0" stroke-width="2" />
+                <circle cx="286" cy="502" r="2" fill="#d4a017" />
+                <circle cx="330" cy="502" r="2" fill="#d4a017" />
+              </g>
+
+              <path d="M699 69h42" stroke="#d4a017" stroke-width="5" stroke-linecap="round" />
+              <path d="M720 69v19" stroke="#8b9caf" stroke-width="3" />
+              <path d="M683 87q37-23 74 0l19 35h-112z" fill="#d4a017" fill-opacity=".08" />
+              <text x="500" y="90" fill="#d4a017" font-family="Cairo, sans-serif" font-size="16" text-anchor="middle" style="opacity:0.7;">مكتب صاحب المطعم</text>
+            </svg>
+            <svg class="scene-svg" data-scene="observatory" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" data-i18n-aria-label="observatorySceneAlt" style="display:none;">
+              <defs>
+                <linearGradient id="obsSky" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#101c35" />
+                  <stop offset="100%" stop-color="#304461" />
+                </linearGradient>
+                <linearGradient id="obsFloor" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#394657" />
+                  <stop offset="100%" stop-color="#111923" />
+                </linearGradient>
+                <linearGradient id="obsDome" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#65758b" />
+                  <stop offset="100%" stop-color="#26364a" />
                 </linearGradient>
               </defs>
-              <rect x="0" y="0" width="1000" height="700" fill="url(#wallGrad)" />
-              <rect x="120" y="120" width="760" height="460" fill="#242733" stroke="#3d414f" stroke-width="3" />
-              <rect x="380" y="320" width="260" height="140" fill="#3a3f4c" stroke="#3d414f" stroke-width="2" />
-              <rect x="400" y="340" width="220" height="100" fill="#2e3240" />
-              <rect x="620" y="320" width="140" height="140" fill="#3a3f4c" stroke="#3d414f" stroke-width="2" />
-              <rect x="630" y="330" width="120" height="120" fill="#2e3240" />
-              <rect x="160" y="460" width="100" height="160" fill="#3a3f4c" stroke="#3d414f" stroke-width="2" />
-              <rect x="170" y="470" width="80" height="140" fill="#2e3240" />
-              <rect x="720" y="460" width="120" height="120" fill="#3a3f4c" stroke="#3d414f" stroke-width="2" />
-              <rect x="730" y="470" width="100" height="100" fill="#2e3240" />
-              <rect x="120" y="120" width="100" height="30" fill="#d4a017" />
-              <text x="500" y="90" fill="#d4a017" font-family="Cairo, sans-serif" font-size="16" text-anchor="middle" style="opacity:0.7;">مكتب صاحب المطعم</text>
+              <rect width="1000" height="700" fill="#101722" />
+              <path d="M0 0h1000v410H0z" fill="url(#obsSky)" />
+              <g fill="#e6d7a8" opacity=".8">
+                <circle cx="105" cy="82" r="2" /><circle cx="205" cy="137" r="2" />
+                <circle cx="315" cy="66" r="2" /><circle cx="440" cy="122" r="2" />
+                <circle cx="573" cy="74" r="2" /><circle cx="692" cy="145" r="2" />
+                <circle cx="825" cy="91" r="2" /><circle cx="916" cy="161" r="2" />
+              </g>
+              <path d="M75 411a425 330 0 0 1 850 0Z" fill="url(#obsDome)" stroke="#a9b5c3" stroke-opacity=".55" stroke-width="6" />
+              <path d="M496 82v318m-10-310h20" stroke="#d4a017" stroke-width="5" opacity=".72" />
+              <path d="M0 413h1000v287H0z" fill="url(#obsFloor)" />
+              <path d="M0 466h1000m-1000 87h1000m-1000 84h1000" stroke="#a4b3c2" stroke-opacity=".12" stroke-width="3" />
+              <path d="M130 414v286m220-286v286m220-286v286m220-286v286" stroke="#a4b3c2" stroke-opacity=".08" stroke-width="3" />
+              <g transform="translate(685 424)" stroke="#bac8d6" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M-50 24 65-48" />
+                <path d="m-4 54 28-78m-28 78-50 73m50-73 57 73" fill="none" />
+                <path d="m43-61 34 31" stroke="#d4a017" stroke-width="20" />
+              </g>
+              <rect x="790" y="300" width="116" height="110" rx="8" fill="#182536" stroke="#8395a9" stroke-width="5" />
+              <path d="M808 325h79m-79 22h79m-79 22h50" stroke="#6bc5d5" stroke-width="5" stroke-linecap="round" />
+              <g transform="translate(500 565)" fill="#b9c5d0" stroke="#111923" stroke-width="5">
+                <circle cx="0" cy="-35" r="18" />
+                <path d="M-18-15h36l18 42H-36z" />
+                <path d="m-27 8-34 25m88-25 34 25M-15 25l-21 45m51-45 21 45" fill="none" stroke-width="12" stroke-linecap="round" />
+              </g>
+              <ellipse cx="500" cy="590" rx="90" ry="25" fill="#b23a48" opacity=".18" />
+            </svg>
+            <svg class="scene-svg" data-scene="museum" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" aria-label="Crime scene museum exhibition hall" style="display:none;">
+              <defs>
+                <linearGradient id="musWallGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#2c3550" />
+                  <stop offset="100%" stop-color="#151b2b" />
+                </linearGradient>
+                <linearGradient id="musFloorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#2a3243" />
+                  <stop offset="100%" stop-color="#0e121b" />
+                </linearGradient>
+                <linearGradient id="musFrameGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#e0b85a" />
+                  <stop offset="100%" stop-color="#8a6420" />
+                </linearGradient>
+                <linearGradient id="musMarbleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#cdd6e2" />
+                  <stop offset="100%" stop-color="#78859a" />
+                </linearGradient>
+                <linearGradient id="musWoodGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#9a6a3c" />
+                  <stop offset="100%" stop-color="#4f351f" />
+                </linearGradient>
+                <linearGradient id="musGlassGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#12304a" />
+                  <stop offset="100%" stop-color="#3c6d8c" />
+                </linearGradient>
+                <filter id="musSoftShadow" x="-30%" y="-30%" width="160%" height="170%">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="7" />
+                  <feOffset dy="7" />
+                  <feComponentTransfer><feFuncA type="linear" slope=".28" /></feComponentTransfer>
+                  <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+              </defs>
+              <rect width="1000" height="440" fill="url(#musWallGrad)" />
+              <path d="M0 74h1000M0 424h1000" stroke="#7d8aa6" stroke-opacity=".2" stroke-width="3" />
+              <path d="M34 0v430M966 0v430" stroke="#0d1420" stroke-opacity=".34" stroke-width="8" />
+              <path d="M0 441h1000v259H0z" fill="url(#musFloorGrad)" />
+              <path d="M0 486h1000M0 540h1000M0 598h1000M0 656h1000" stroke="#8b96a6" stroke-opacity=".09" stroke-width="2" />
+              <path d="M120 442v258m190-258v258m210-258v258m230-258v258m170-258v258" stroke="#8b96a6" stroke-opacity=".07" stroke-width="2" />
+
+              <g fill="#f2d37a" opacity=".16">
+                <path d="M470 0h60l26 40h-112z" />
+                <path d="M120 0h44l18 34h-80z" />
+                <path d="M820 0h44l18 34h-80z" />
+              </g>
+              <g fill="#f2d37a" opacity=".5">
+                <circle cx="500" cy="34" r="6" />
+                <circle cx="142" cy="30" r="5" />
+                <circle cx="842" cy="30" r="5" />
+              </g>
+
+              <ellipse cx="500" cy="510" rx="360" ry="120" fill="#050a10" opacity=".34" />
+
+              <!-- Ornate empty frame on the back wall -->
+              <g filter="url(#musSoftShadow)">
+                <rect x="388" y="86" width="224" height="216" rx="6" fill="url(#musFrameGrad)" stroke="#6f4f14" stroke-width="4" />
+                <rect x="410" y="108" width="180" height="172" rx="3" fill="#0c1119" stroke="#f0d47a" stroke-opacity=".4" stroke-width="3" />
+                <path d="M418 250q26-20 52-6t60-10 46 6v40h-158z" fill="#1b2431" opacity=".8" />
+                <path d="M470 150q30-24 60 0t-30 34q-30-10-30-34z" fill="#26313f" opacity=".7" />
+                <path d="M496 112v10m-6-4h12" stroke="#d4a017" stroke-opacity=".5" stroke-width="2" />
+                <circle cx="500" cy="94" r="5" fill="#f0d47a" />
+              </g>
+
+              <!-- Marble display pedestal -->
+              <g filter="url(#musSoftShadow)">
+                <rect x="432" y="320" width="136" height="18" rx="4" fill="url(#musMarbleGrad)" stroke="#e6edf5" stroke-width="3" />
+                <path d="M444 338h112l10 90H434z" fill="url(#musMarbleGrad)" stroke="#aab7c7" stroke-width="3" />
+                <path d="M452 356h96m-88 14h80m-72 14h64" stroke="#7c8ba0" stroke-opacity=".55" stroke-width="2" />
+                <path d="M500 338v90" stroke="#95a3b6" stroke-opacity=".5" stroke-width="2" />
+              </g>
+              <path d="M462 336h76" stroke="#d4a017" stroke-opacity=".5" stroke-width="3" />
+
+              <!-- Security desk with monitors (left) -->
+              <g filter="url(#musSoftShadow)">
+                <rect x="58" y="248" width="196" height="150" rx="8" fill="#1b2532" stroke="#8d9cae" stroke-width="4" />
+                <rect x="76" y="264" width="74" height="52" rx="4" fill="url(#musGlassGrad)" stroke="#c4d2de" stroke-width="3" />
+                <rect x="162" y="264" width="74" height="52" rx="4" fill="url(#musGlassGrad)" stroke="#c4d2de" stroke-width="3" />
+                <rect x="76" y="326" width="74" height="52" rx="4" fill="url(#musGlassGrad)" stroke="#c4d2de" stroke-width="3" />
+                <rect x="162" y="326" width="74" height="52" rx="4" fill="url(#musGlassGrad)" stroke="#c4d2de" stroke-width="3" />
+                <path d="M84 300h58m-58 10h42m28-10h58m-58 10h38" stroke="#7ec2e0" stroke-opacity=".55" stroke-width="3" />
+                <path d="M84 362h58m-58 10h30m28-10h58m-58 10h44" stroke="#7ec2e0" stroke-opacity=".4" stroke-width="3" />
+                <rect x="96" y="398" width="120" height="14" rx="4" fill="#2b3949" stroke="#9fb0c0" stroke-width="2" />
+              </g>
+
+              <!-- Fire extinguisher (left wall) -->
+              <g filter="url(#musSoftShadow)">
+                <rect x="288" y="288" width="46" height="96" rx="20" fill="#b23a2f" stroke="#e4b3ad" stroke-width="4" />
+                <rect x="300" y="276" width="22" height="16" rx="4" fill="#3a3f47" stroke="#c9d2da" stroke-width="3" />
+                <path d="M334 300q26 8 22 40t-24 30" fill="none" stroke="#2c2f36" stroke-width="6" stroke-linecap="round" />
+                <rect x="292" y="330" width="38" height="14" rx="3" fill="#e6edf5" opacity=".82" />
+              </g>
+
+              <!-- Restoration workbench (right) -->
+              <g filter="url(#musSoftShadow)">
+                <rect x="688" y="300" width="264" height="24" rx="5" fill="url(#musWoodGrad)" stroke="#c28e56" stroke-width="4" />
+                <rect x="702" y="324" width="236" height="86" rx="4" fill="#5c3f26" stroke="#a57847" stroke-width="3" />
+                <path d="M726 324v86m96-86v86m96-86v86" stroke="#3f2a17" stroke-width="4" />
+                <rect x="712" y="278" width="26" height="24" rx="3" fill="#c9d2da" stroke="#8594a4" stroke-width="2" />
+                <path d="M725 278v-18m-6 0h12" stroke="#e0c58f" stroke-width="3" stroke-linecap="round" />
+                <rect x="752" y="282" width="22" height="20" rx="3" fill="#7a9b6a" stroke="#c6d6bb" stroke-width="2" />
+                <rect x="788" y="280" width="20" height="22" rx="3" fill="#9b7a6a" stroke="#d6c2bb" stroke-width="2" />
+                <path d="M830 300h96l-6 20h-90z" fill="#e7dfc8" stroke="#b6a991" stroke-width="2" />
+                <path d="M842 306h58m-54 6h44" stroke="#78879a" stroke-width="2" />
+                <path d="M812 300l10-18m-2 18l12-22" stroke="#c4d2de" stroke-width="3" stroke-linecap="round" />
+              </g>
+
+              <!-- Tall storage cabinet (far right corner) -->
+              <g filter="url(#musSoftShadow)">
+                <rect x="856" y="112" width="102" height="220" rx="6" fill="#2c3849" stroke="#a9b5c3" stroke-width="4" />
+                <path d="M907 112v220" stroke="#8d9cae" stroke-width="3" />
+                <rect x="866" y="126" width="34" height="192" rx="3" fill="#1d2735" stroke="#8494a6" stroke-width="2" />
+                <rect x="914" y="126" width="34" height="192" rx="3" fill="#1d2735" stroke="#8494a6" stroke-width="2" />
+                <circle cx="898" cy="222" r="4" fill="#d4a017" />
+                <circle cx="916" cy="222" r="4" fill="#d4a017" />
+                <rect x="872" y="136" width="22" height="10" rx="2" fill="#d4a017" opacity=".6" />
+                <rect x="920" y="136" width="22" height="10" rx="2" fill="#d4a017" opacity=".6" />
+              </g>
+
+              <!-- Guard body chalk outline on the floor -->
+              <g fill="none" stroke="#dce6ee" stroke-linecap="round" stroke-linejoin="round" opacity=".8">
+                <path d="M262 516q16-14 34-8 17-9 34 1l19 17-9 22-13-8-11 32 19 16-9 10-30-16-10-25-15 27-27 8-6-11 20-15 9-33-15 10-14-9Z"
+                  stroke-width="5" stroke-dasharray="11 7" />
+                <circle cx="280" cy="510" r="16" stroke-width="4" stroke-dasharray="7 5" />
+                <path d="m252 528-17 13m88 2 18 14" stroke-width="4" stroke-dasharray="6 6" />
+              </g>
+
+              <!-- Visitor bench -->
+              <g filter="url(#musSoftShadow)">
+                <rect x="520" y="498" width="188" height="20" rx="6" fill="#6b4a2c" stroke="#c28e56" stroke-width="3" />
+                <path d="M542 518v34m144-34v34m-160 0h176" stroke="#8a6a44" stroke-width="6" stroke-linecap="round" />
+              </g>
+
+              <!-- Trash bin near the pedestal -->
+              <g filter="url(#musSoftShadow)">
+                <path d="M604 424h58l-6 48q-23 12-46 0z" fill="#28394b" stroke="#bcc8d2" stroke-width="4" />
+                <ellipse cx="633" cy="424" rx="29" ry="8" fill="#4d6076" stroke="#bcc8d2" stroke-width="4" />
+                <path d="M616 440q17 5 34 0m-32 9q15 5 30 0" fill="none" stroke="#d6e0e8" stroke-opacity=".6" stroke-width="2" />
+              </g>
+
+              <path d="M690 64h44" stroke="#d4a017" stroke-width="5" stroke-linecap="round" />
+              <path d="M712 64v16" stroke="#8b9caf" stroke-width="3" />
+              <text x="500" y="420" fill="#d4a017" font-family="Cairo, sans-serif" font-size="15" text-anchor="middle" style="opacity:0.6;">قاعة المعارض الرئيسية</text>
+            </svg>
+            <svg class="scene-svg" data-scene="hotel" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" aria-label="Crime scene hotel suite and corridor" style="display:none;">
+              <defs>
+                <linearGradient id="hotWallGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#3b2f43" />
+                  <stop offset="100%" stop-color="#1b1522" />
+                </linearGradient>
+                <linearGradient id="hotFloorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#4a382d" />
+                  <stop offset="100%" stop-color="#170f0b" />
+                </linearGradient>
+                <linearGradient id="hotCorrGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#2c2c3a" />
+                  <stop offset="100%" stop-color="#101018" />
+                </linearGradient>
+                <linearGradient id="hotBedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#f3ebdd" />
+                  <stop offset="100%" stop-color="#c7b49c" />
+                </linearGradient>
+                <linearGradient id="hotWoodGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#9a6a3c" />
+                  <stop offset="100%" stop-color="#4a311c" />
+                </linearGradient>
+                <linearGradient id="hotGoldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#e0b85a" />
+                  <stop offset="100%" stop-color="#8a6420" />
+                </linearGradient>
+                <filter id="hotSoftShadow" x="-30%" y="-30%" width="160%" height="170%">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="7" />
+                  <feOffset dy="7" />
+                  <feComponentTransfer><feFuncA type="linear" slope=".28" /></feComponentTransfer>
+                  <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+              </defs>
+              <rect width="1000" height="440" fill="url(#hotWallGrad)" />
+              <rect x="0" y="441" width="1000" height="259" fill="url(#hotFloorGrad)" />
+
+              <!-- corridor recess on the right -->
+              <rect x="770" y="0" width="230" height="440" fill="url(#hotCorrGrad)" />
+              <rect x="770" y="441" width="230" height="259" fill="#0c0a10" opacity=".7" />
+              <path d="M770 0v700" stroke="#5a4a63" stroke-opacity=".5" stroke-width="4" />
+
+              <!-- wall paneling -->
+              <path d="M0 74h770M0 424h770" stroke="#8f7fa0" stroke-opacity=".16" stroke-width="3" />
+              <path d="M120 0v430M300 0v430M470 0v430M620 0v430" stroke="#0e0a14" stroke-opacity=".3" stroke-width="4" />
+              <path d="M0 486h1000M0 540h1000M0 598h1000M0 656h1000" stroke="#a08a70" stroke-opacity=".08" stroke-width="2" />
+              <path d="M150 442v258m200-258v258m210-258v258m190-258v258" stroke="#a08a70" stroke-opacity=".06" stroke-width="2" />
+
+              <!-- ceiling light -->
+              <g opacity=".55">
+                <path d="M470 0h60l22 34h-104z" fill="#f2d37a" opacity=".18" />
+                <circle cx="500" cy="30" r="7" fill="#f7e2a0" />
+              </g>
+              <ellipse cx="470" cy="510" rx="340" ry="120" fill="#05040a" opacity=".32" />
+
+              <!-- framed artwork above the bed -->
+              <g filter="url(#hotSoftShadow)">
+                <rect x="380" y="70" width="150" height="96" rx="4" fill="url(#hotGoldGrad)" stroke="#6f4f14" stroke-width="3" />
+                <rect x="392" y="82" width="126" height="72" rx="2" fill="#20283a" stroke="#f0d47a" stroke-opacity=".35" stroke-width="2" />
+                <path d="M400 146q22-30 44-8t36-16 30 8v22h-110z" fill="#33405a" opacity=".85" />
+              </g>
+
+              <!-- suite door -->
+              <g filter="url(#hotSoftShadow)">
+                <rect x="646" y="118" width="126" height="322" rx="6" fill="#2b2130" stroke="#b79cc4" stroke-width="4" />
+                <rect x="660" y="132" width="98" height="294" rx="4" fill="url(#hotWoodGrad)" stroke="#c99a63" stroke-width="3" />
+                <path d="M676 150h66m-66 30h66m-66 30h66m-66 30h66m-66 30h66m-66 30h66m-66 30h66m-66 30h66" stroke="#3f2a17" stroke-opacity=".5" stroke-width="2" />
+                <rect x="690" y="318" width="20" height="22" rx="4" fill="url(#hotGoldGrad)" stroke="#6f4f14" stroke-width="2" />
+                <circle cx="700" cy="329" r="5" fill="#f7e2a0" />
+                <rect x="676" y="120" width="66" height="12" rx="3" fill="#d4a017" opacity=".5" />
+              </g>
+              <text x="709" y="112" fill="#d4a017" font-family="Cairo, sans-serif" font-size="16" text-anchor="middle" style="opacity:0.75;">704</text>
+
+              <!-- king bed -->
+              <g filter="url(#hotSoftShadow)">
+                <rect x="300" y="176" width="292" height="86" rx="8" fill="#4a3728" stroke="#c99a63" stroke-width="4" />
+                <path d="M318 262h256l26 150q-154 26-308 0z" fill="url(#hotBedGrad)" stroke="#a89478" stroke-width="3" />
+                <rect x="330" y="272" width="96" height="46" rx="10" fill="#fbf5ea" stroke="#d8c8b0" stroke-width="2" />
+                <rect x="470" y="272" width="96" height="46" rx="10" fill="#fbf5ea" stroke="#d8c8b0" stroke-width="2" />
+                <path d="M318 340h282" stroke="#c9b79c" stroke-width="3" />
+                <path d="M306 410q172 26 344 0" stroke="#b09c80" stroke-width="3" fill="none" />
+              </g>
+
+              <!-- writing desk and chair -->
+              <g filter="url(#hotSoftShadow)">
+                <rect x="52" y="330" width="200" height="20" rx="4" fill="url(#hotWoodGrad)" stroke="#c99a63" stroke-width="3" />
+                <rect x="66" y="350" width="172" height="76" rx="4" fill="#5c3f26" stroke="#a57847" stroke-width="3" />
+                <path d="M96 350v76m112-76v76" stroke="#3f2a17" stroke-width="4" />
+                <rect x="84" y="300" width="42" height="30" rx="3" fill="#d8cbb6" stroke="#9c8b74" stroke-width="2" />
+                <path d="M92 310h26m-26 8h20" stroke="#7a6a54" stroke-width="2" />
+                <rect x="150" y="306" width="26" height="24" rx="3" fill="#8a9bb0" stroke="#c3d0dd" stroke-width="2" />
+                <rect x="250" y="360" width="46" height="14" rx="4" fill="#3a2b1c" />
+                <path d="M256 374v40m34-40v40" stroke="#3a2b1c" stroke-width="5" />
+              </g>
+
+              <!-- room-service cart -->
+              <g filter="url(#hotSoftShadow)">
+                <rect x="536" y="452" width="96" height="12" rx="4" fill="#c9d2da" stroke="#8594a4" stroke-width="3" />
+                <rect x="546" y="464" width="76" height="58" rx="4" fill="#3a4150" stroke="#a9b5c3" stroke-width="3" />
+                <circle cx="552" cy="536" r="9" fill="#20242e" stroke="#9fb0c0" stroke-width="3" />
+                <circle cx="616" cy="536" r="9" fill="#20242e" stroke="#9fb0c0" stroke-width="3" />
+                <rect x="556" y="430" width="34" height="22" rx="3" fill="#e7dfc8" stroke="#b6a991" stroke-width="2" />
+                <path d="M596 452v-16m-8 0h16" stroke="#e0c58f" stroke-width="3" stroke-linecap="round" />
+              </g>
+
+              <!-- open suitcase near the foot of the bed -->
+              <g filter="url(#hotSoftShadow)">
+                <rect x="452" y="574" width="118" height="62" rx="8" fill="#3a2f4a" stroke="#b79cc4" stroke-width="4" />
+                <path d="M511 574v62" stroke="#1f1830" stroke-width="3" />
+                <path d="M478 574v-10h66v10" fill="none" stroke="#b79cc4" stroke-width="4" />
+                <rect x="494" y="596" width="34" height="10" rx="3" fill="#d4a017" opacity=".7" />
+                <path d="M470 560q56-18 84-4" stroke="#e7dfc8" stroke-width="3" fill="none" opacity=".7" />
+              </g>
+
+              <!-- victim chalk outline on the floor -->
+              <g fill="none" stroke="#e7d9e8" stroke-linecap="round" stroke-linejoin="round" opacity=".82">
+                <path d="M292 594q16-14 34-8 17-9 34 1l19 17-9 22-13-8-11 32 19 16-9 10-30-16-10-25-15 27-27 8-6-11 20-15 9-33-15 10-14-9Z" stroke-width="5" stroke-dasharray="11 7" />
+                <circle cx="310" cy="588" r="16" stroke-width="4" stroke-dasharray="7 5" />
+                <path d="m282 606-17 13m88 2 18 14" stroke-width="4" stroke-dasharray="6 6" />
+              </g>
+
+              <!-- corridor ceiling camera -->
+              <g filter="url(#hotSoftShadow)">
+                <rect x="778" y="104" width="26" height="34" rx="6" fill="#2b3038" stroke="#9fb0c0" stroke-width="3" />
+                <path d="M790 138l-14 22h30z" fill="#3a4150" stroke="#9fb0c0" stroke-width="3" />
+                <circle cx="790" cy="122" r="8" fill="#141a22" stroke="#7ec2e0" stroke-width="3" />
+                <circle cx="790" cy="122" r="3" fill="#7ec2e0" />
+                <path d="M804 108q20 6 24 26" stroke="#7ec2e0" stroke-opacity=".4" stroke-width="3" fill="none" />
+              </g>
+
+              <!-- corridor vent hiding a compartment -->
+              <g filter="url(#hotSoftShadow)">
+                <rect x="872" y="176" width="76" height="54" rx="4" fill="#2a2f38" stroke="#a9b5c3" stroke-width="4" />
+                <path d="M880 190h60m-60 12h60m-60 12h60m-60 12h60" stroke="#0f1319" stroke-width="4" />
+                <circle cx="878" cy="182" r="3" fill="#d4a017" />
+                <circle cx="942" cy="182" r="3" fill="#d4a017" />
+                <circle cx="878" cy="224" r="3" fill="#d4a017" />
+                <circle cx="942" cy="224" r="3" fill="#d4a017" />
+              </g>
+
+              <!-- corridor trash bin -->
+              <g filter="url(#hotSoftShadow)">
+                <path d="M862 512h58l-6 48q-23 12-46 0z" fill="#28394b" stroke="#bcc8d2" stroke-width="4" />
+                <ellipse cx="891" cy="512" rx="29" ry="8" fill="#4d6076" stroke="#bcc8d2" stroke-width="4" />
+                <path d="M874 528q17 5 34 0m-32 9q15 5 30 0" fill="none" stroke="#d6e0e8" stroke-opacity=".6" stroke-width="2" />
+              </g>
+              <path d="M930 548l14 18" stroke="#e7d9e8" stroke-opacity=".5" stroke-width="3" />
+
+              <!-- corridor floor guide lines -->
+              <path d="M790 620h190M810 660h170" stroke="#8b96a6" stroke-opacity=".12" stroke-width="3" />
+              <text x="150" y="484" fill="#d4a017" font-family="Cairo, sans-serif" font-size="15" text-anchor="middle" style="opacity:0.5;">جناح 704</text>
+              <text x="882" y="686" fill="#d4a017" font-family="Cairo, sans-serif" font-size="15" text-anchor="middle" style="opacity:0.5;">ممر الطابق السابع</text>
+            </svg>
+            <svg class="scene-svg" data-scene="factory" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" aria-label="مصنع وممرات ومخزن / Factory floor, aisles and warehouse" style="display:none;">
+              <defs>
+                <linearGradient id="facWallGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#33404a" />
+                  <stop offset="100%" stop-color="#151d22" />
+                </linearGradient>
+                <linearGradient id="facFloorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#343b3c" />
+                  <stop offset="100%" stop-color="#121719" />
+                </linearGradient>
+                <linearGradient id="facMachineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#80909a" />
+                  <stop offset="100%" stop-color="#35434b" />
+                </linearGradient>
+                <linearGradient id="facFireGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#ff9d42" stop-opacity=".75" />
+                  <stop offset="100%" stop-color="#a52d16" stop-opacity=".05" />
+                </linearGradient>
+                <filter id="facShadow" x="-30%" y="-30%" width="160%" height="170%">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="6" />
+                  <feOffset dy="6" />
+                  <feComponentTransfer><feFuncA type="linear" slope=".35" /></feComponentTransfer>
+                  <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+              </defs>
+              <rect width="1000" height="440" fill="url(#facWallGrad)" />
+              <rect y="441" width="1000" height="259" fill="url(#facFloorGrad)" />
+              <path d="M0 94h1000M0 425h1000" stroke="#9eacb2" stroke-opacity=".22" stroke-width="5" />
+              <path d="M80 0v430M270 0v430M470 0v430M680 0v430M890 0v430" stroke="#11191d" stroke-width="9" />
+              <path d="M0 493h1000M0 556h1000M0 621h1000M0 678h1000" stroke="#d3bd68" stroke-opacity=".12" stroke-width="3" />
+              <path d="M100 443v257m210-257v257m210-257v257m210-257v257m180-257v257" stroke="#d3bd68" stroke-opacity=".08" stroke-width="2" />
+
+              <!-- overhead pipes and work lights -->
+              <path d="M0 53h430q30 0 30 30v28h245q34 0 34 32v22h291" fill="none" stroke="#71858b" stroke-width="12" />
+              <path d="M0 53h430q30 0 30 30v28h245q34 0 34 32v22h291" fill="none" stroke="#b3c1b6" stroke-opacity=".36" stroke-width="4" />
+              <g fill="#f3d37a">
+                <path d="M126 0h62l18 42H108z" opacity=".18" />
+                <circle cx="157" cy="33" r="7" />
+                <path d="M402 0h62l18 42h-98z" opacity=".18" />
+                <circle cx="433" cy="33" r="7" />
+                <path d="M736 0h62l18 42h-98z" opacity=".18" />
+                <circle cx="767" cy="33" r="7" />
+              </g>
+
+              <!-- production line and belt -->
+              <g filter="url(#facShadow)">
+                <rect x="34" y="267" width="616" height="38" rx="8" fill="#202a2f" stroke="#92a0a5" stroke-width="4" />
+                <path d="M52 286h578" stroke="#d3bd68" stroke-width="5" stroke-dasharray="27 16" />
+                <rect x="70" y="182" width="132" height="82" rx="8" fill="url(#facMachineGrad)" stroke="#aab7bb" stroke-width="4" />
+                <rect x="88" y="198" width="42" height="46" rx="4" fill="#1b292e" stroke="#d3bd68" stroke-width="3" />
+                <circle cx="168" cy="221" r="22" fill="#202a2f" stroke="#c1ccca" stroke-width="5" />
+                <circle cx="168" cy="221" r="8" fill="#d3bd68" />
+                <rect x="239" y="144" width="128" height="120" rx="9" fill="url(#facMachineGrad)" stroke="#aab7bb" stroke-width="4" />
+                <path d="M260 153v58h87v-58M279 211v38m49-38v38" fill="none" stroke="#d2d7d4" stroke-width="5" />
+                <rect x="278" y="129" width="52" height="18" rx="4" fill="#c15b38" stroke="#df9560" stroke-width="3" />
+                <rect x="398" y="188" width="138" height="76" rx="8" fill="url(#facMachineGrad)" stroke="#aab7bb" stroke-width="4" />
+                <path d="M415 201h102m-102 18h102m-102 18h102" stroke="#222d32" stroke-width="5" />
+                <rect x="554" y="165" width="78" height="99" rx="6" fill="#394951" stroke="#acb8b8" stroke-width="4" />
+                <circle cx="593" cy="196" r="16" fill="#1b272c" stroke="#d3bd68" stroke-width="4" />
+                <path d="M593 180v32m-16-16h32" stroke="#d3bd68" stroke-width="3" />
+                <circle cx="95" cy="315" r="12" fill="#141b1e" stroke="#87969a" stroke-width="4" />
+                <circle cx="586" cy="315" r="12" fill="#141b1e" stroke="#87969a" stroke-width="4" />
+              </g>
+
+              <!-- control station and cable platform -->
+              <g filter="url(#facShadow)">
+                <rect x="675" y="169" width="105" height="143" rx="7" fill="#27353a" stroke="#9eacb2" stroke-width="4" />
+                <rect x="689" y="183" width="77" height="48" rx="4" fill="#101d22" stroke="#d3bd68" stroke-width="3" />
+                <path d="M699 218l13-14 11 8 15-19 18 11" fill="none" stroke="#73b89b" stroke-width="4" />
+                <circle cx="701" cy="255" r="7" fill="#79bd83" />
+                <circle cx="728" cy="255" r="7" fill="#c85a48" />
+                <circle cx="755" cy="255" r="7" fill="#d3bd68" />
+                <path d="M650 333h176m-161 0v35m146-35v35" stroke="#aab7bb" stroke-width="10" />
+                <path d="M656 350h165" stroke="#d3bd68" stroke-width="3" stroke-dasharray="13 10" />
+              </g>
+
+              <!-- side aisle and maintenance cart -->
+              <path d="M18 453h635" stroke="#d3bd68" stroke-opacity=".55" stroke-width="5" stroke-dasharray="34 22" />
+              <path d="M24 477h625" stroke="#d3bd68" stroke-opacity=".26" stroke-width="2" stroke-dasharray="34 22" />
+              <g filter="url(#facShadow)">
+                <rect x="79" y="487" width="112" height="18" rx="4" fill="#adb9b8" stroke="#4d5a5d" stroke-width="3" />
+                <rect x="92" y="505" width="87" height="52" rx="5" fill="#405259" stroke="#aab7bb" stroke-width="3" />
+                <circle cx="104" cy="566" r="10" fill="#161d20" stroke="#aab7bb" stroke-width="3" />
+                <circle cx="169" cy="566" r="10" fill="#161d20" stroke="#aab7bb" stroke-width="3" />
+                <path d="M106 488v-26h58v26" fill="none" stroke="#aab7bb" stroke-width="4" />
+              </g>
+
+              <!-- warehouse racks and solvent store -->
+              <rect x="813" y="114" width="171" height="315" rx="7" fill="#282d2e" stroke="#a98c54" stroke-width="5" />
+              <path d="M820 190h156M820 269h156M820 348h156" stroke="#b6975c" stroke-width="8" />
+              <path d="M839 125v292m60-292v292m61-292v292" stroke="#8f7547" stroke-width="6" />
+              <g filter="url(#facShadow)">
+                <rect x="834" y="138" width="45" height="43" rx="5" fill="#926c38" stroke="#d0aa5d" stroke-width="3" />
+                <rect x="908" y="138" width="51" height="43" rx="5" fill="#46564b" stroke="#a5b88a" stroke-width="3" />
+                <rect x="844" y="207" width="49" height="48" rx="5" fill="#384b49" stroke="#a5b88a" stroke-width="3" />
+                <rect x="914" y="205" width="48" height="50" rx="5" fill="#8d6038" stroke="#d0aa5d" stroke-width="3" />
+                <path d="M855 219h27m-26 13h25" stroke="#e4d7b3" stroke-width="3" />
+                <path d="M927 217h21m-21 12h21m-21 12h21" stroke="#e4d7b3" stroke-width="3" />
+                <rect x="839" y="286" width="49" height="51" rx="6" fill="#56615a" stroke="#c6b37d" stroke-width="3" />
+                <rect x="914" y="286" width="47" height="51" rx="6" fill="#72533d" stroke="#c6b37d" stroke-width="3" />
+                <path d="M854 296v31m16-31v31m57-31v31m16-31v31" stroke="#d3bd68" stroke-width="3" />
+              </g>
+              <ellipse cx="903" cy="412" rx="100" ry="48" fill="url(#facFireGlow)" />
+              <path d="M863 406q-20-30 6-51 8 18 17 20 1-29 25-44 4 33 21 43 21 15 4 39z" fill="#bc4d28" opacity=".45" />
+
+              <!-- dark service corridor linking the production floor to storage -->
+              <path d="M653 431h170v269H653z" fill="#101619" opacity=".78" />
+              <path d="M653 439h170M653 677h170" stroke="#b7a56c" stroke-opacity=".22" stroke-width="4" />
+              <path d="M668 469h143m-143 62h143m-143 62h143m-143 62h143" stroke="#879498" stroke-opacity=".14" stroke-width="3" />
+              <rect x="689" y="465" width="94" height="34" rx="4" fill="#202a2f" stroke="#728188" stroke-width="3" />
+              <path d="M704 482h64" stroke="#d3bd68" stroke-width="3" stroke-dasharray="12 8" />
+              <g fill="#d3bd68" font-family="Cairo, sans-serif" font-size="16" text-anchor="middle" opacity=".68">
+                <text x="344" y="397">خط الإنتاج / Production Line</text>
+                <text x="900" y="465">مخزن المواد / Materials Store</text>
+                <text x="738" y="650">ممر الصيانة / Service Aisle</text>
+              </g>
+              <g fill="none" stroke="#e7d9e8" stroke-linecap="round" stroke-linejoin="round" opacity=".82" transform="translate(230 -25)">
+                <path d="M292 594q16-14 34-8 17-9 34 1l19 17-9 22-13-8-11 32 19 16-9 10-30-16-10-25-15 27-27 8-6-11 20-15 9-33-15 10-14-9Z" stroke-width="5" stroke-dasharray="11 7" />
+                <circle cx="310" cy="588" r="16" stroke-width="4" stroke-dasharray="7 5" />
+                <path d="m282 606-17 13m88 2 18 14" stroke-width="4" stroke-dasharray="6 6" />
+              </g>
+            </svg>
+            <svg class="scene-svg" data-scene="villa" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" aria-label="صالة فيلا وحديقة / Villa salon and garden" style="display:none;">
+              <defs>
+                <linearGradient id="vilWall" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#343148" />
+                  <stop offset="100%" stop-color="#191a28" />
+                </linearGradient>
+                <linearGradient id="vilFloor" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#655242" />
+                  <stop offset="100%" stop-color="#241e1b" />
+                </linearGradient>
+                <linearGradient id="vilGarden" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#354c42" />
+                  <stop offset="100%" stop-color="#18271f" />
+                </linearGradient>
+                <linearGradient id="vilGlass" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#9bc5cc" stop-opacity=".08" />
+                  <stop offset="50%" stop-color="#c1d9d4" stop-opacity=".3" />
+                  <stop offset="100%" stop-color="#83a9b5" stop-opacity=".08" />
+                </linearGradient>
+                <linearGradient id="vilWood" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#9b7049" />
+                  <stop offset="100%" stop-color="#4c3426" />
+                </linearGradient>
+                <filter id="vilShadow" x="-30%" y="-30%" width="160%" height="170%">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="6" />
+                  <feOffset dy="5" />
+                  <feComponentTransfer><feFuncA type="linear" slope=".3" /></feComponentTransfer>
+                  <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+              </defs>
+              <rect width="1000" height="700" fill="#121720" />
+              <rect width="665" height="430" fill="url(#vilWall)" />
+              <rect y="431" width="665" height="269" fill="url(#vilFloor)" />
+              <rect x="666" width="334" height="700" fill="url(#vilGarden)" />
+              <path d="M0 94h665M0 422h665" stroke="#c4b8aa" stroke-opacity=".14" stroke-width="5" />
+              <path d="M70 0v420m178-420v420m178-420v420m178-420v420" stroke="#111622" stroke-opacity=".65" stroke-width="8" />
+              <path d="M0 495h665M0 568h665M0 641h665" stroke="#d7c8a9" stroke-opacity=".12" stroke-width="3" />
+              <path d="M110 432v268m165-268v268m165-268v268m165-268v268" stroke="#d7c8a9" stroke-opacity=".08" stroke-width="2" />
+
+              <!-- framed portrait and archive door -->
+              <g filter="url(#vilShadow)">
+                <rect x="34" y="126" width="133" height="180" rx="4" fill="#725638" stroke="#d2b778" stroke-width="7" />
+                <rect x="47" y="139" width="107" height="154" fill="#253041" stroke="#b48b55" stroke-width="3" />
+                <path d="M66 265q14-62 37-54 24 8 38 54" fill="#4a5967" />
+                <circle cx="105" cy="184" r="24" fill="#d2b994" />
+                <path d="M74 205q31-28 62 0l11 58H63z" fill="#354650" />
+                <rect x="178" y="136" width="70" height="150" rx="4" fill="#272d39" stroke="#c2a16a" stroke-width="4" />
+                <path d="M190 156h46m-46 18h36m-36 17h42m-42 24h34m-34 18h42m-42 19h27" stroke="#d4c5a5" stroke-width="3" opacity=".8" />
+                <rect x="503" y="139" width="111" height="280" rx="5" fill="#332b30" stroke="#9c7d52" stroke-width="5" />
+                <path d="M513 151h91v256h-91z" fill="url(#vilWood)" />
+                <path d="M558 151v256" stroke="#35271f" stroke-width="5" />
+                <circle cx="546" cy="282" r="5" fill="#d3b86f" />
+                <circle cx="572" cy="282" r="5" fill="#d3b86f" />
+                <rect x="519" y="165" width="30" height="34" fill="#59442f" stroke="#c2a16a" stroke-width="2" />
+                <rect x="566" y="165" width="30" height="34" fill="#59442f" stroke="#c2a16a" stroke-width="2" />
+              </g>
+
+              <!-- mirror, camera, and ceiling lights -->
+              <g filter="url(#vilShadow)">
+                <rect x="216" y="114" width="148" height="124" rx="7" fill="#31404b" stroke="#c5b88e" stroke-width="6" />
+                <rect x="229" y="127" width="122" height="98" rx="3" fill="url(#vilGlass)" stroke="#8195a3" stroke-width="2" />
+                <path d="M238 211q49-78 102-70" fill="none" stroke="#d5dde0" stroke-opacity=".45" stroke-width="4" />
+                <rect x="415" y="93" width="39" height="28" rx="5" fill="#222b36" stroke="#a8bac7" stroke-width="3" />
+                <circle cx="434" cy="107" r="8" fill="#16212b" stroke="#8dc4d8" stroke-width="3" />
+                <path d="M434 121l-18 28h36z" fill="#8dc4d8" fill-opacity=".08" />
+                <path d="M325 0v39m-47 0h94l-13 22h-68z" fill="none" stroke="#d6c28a" stroke-width="4" />
+                <path d="M285 61h80l16 16h-112z" fill="#f3d37a" opacity=".12" />
+                <circle cx="325" cy="54" r="8" fill="#f3d37a" />
+              </g>
+
+              <!-- sideboard and invitation display -->
+              <g filter="url(#vilShadow)">
+                <rect x="20" y="348" width="198" height="22" rx="5" fill="#9b7049" stroke="#d1ac78" stroke-width="3" />
+                <rect x="34" y="370" width="169" height="59" rx="3" fill="url(#vilWood)" stroke="#8a6544" stroke-width="3" />
+                <path d="M49 372v55m57-55v55m57-55v55" stroke="#3d2c23" stroke-width="4" />
+                <rect x="45" y="314" width="55" height="32" rx="3" fill="#d5c6a9" stroke="#9f8c6b" stroke-width="2" />
+                <path d="M54 324h37m-37 8h29" stroke="#7b6e5e" stroke-width="2" />
+                <rect x="123" y="316" width="49" height="30" rx="3" fill="#243342" stroke="#9bb6c3" stroke-width="2" />
+                <circle cx="147" cy="331" r="7" fill="#87b69b" />
+                <path d="m174 342 27-6 10 17-28 7z" fill="#e1d7c4" stroke="#aa9474" stroke-width="2" />
+                <path d="m181 346 18-4" stroke="#877963" stroke-width="2" />
+              </g>
+
+              <!-- dining table, place cards, and glasses -->
+              <g filter="url(#vilShadow)">
+                <path d="M266 299q146-43 294 0v30q-147 47-294 0z" fill="#6d5038" stroke="#c29a68" stroke-width="5" />
+                <path d="M302 331v84m223-84v84" stroke="#4a3324" stroke-width="11" />
+                <path d="M282 307q129 34 262 0" fill="none" stroke="#d2b18a" stroke-opacity=".55" stroke-width="3" />
+                <ellipse cx="353" cy="300" rx="31" ry="8" fill="#e1d6c2" stroke="#b5a58e" stroke-width="2" />
+                <ellipse cx="478" cy="302" rx="31" ry="8" fill="#e1d6c2" stroke="#b5a58e" stroke-width="2" />
+                <path d="M374 277h27l-3 17h-21zM500 279h26l-3 17h-20z" fill="#b9d1d2" fill-opacity=".28" stroke="#d9e5e4" stroke-width="2" />
+                <path d="M387 294v10m126-8v10" stroke="#d9e5e4" stroke-width="2" />
+                <rect x="423" y="274" width="42" height="24" rx="3" fill="#e8dcc5" stroke="#ad9877" stroke-width="2" />
+                <path d="M429 282h30m-30 6h22" stroke="#76644f" stroke-width="2" />
+                <g fill="#739174" stroke="#c4d2a4" stroke-width="2">
+                  <path d="M434 272q-18-22-21-5 6 13 21 5m5 0q5-24 18-13 2 12-18 13m-4 0q-8-21-16-12 2 11 16 12" />
+                </g>
+              </g>
+
+              <!-- salon seating and piano -->
+              <g filter="url(#vilShadow)">
+                <rect x="38" y="472" width="205" height="75" rx="18" fill="#43505d" stroke="#b59a79" stroke-width="5" />
+                <rect x="52" y="451" width="178" height="42" rx="16" fill="#586574" stroke="#b59a79" stroke-width="4" />
+                <path d="M68 547v28m145-28v28" stroke="#4b3828" stroke-width="8" />
+                <rect x="261" y="500" width="100" height="24" rx="6" fill="#8b6445" stroke="#c6a277" stroke-width="3" />
+                <path d="M274 524v36m74-36v36" stroke="#523b2a" stroke-width="6" />
+                <rect x="396" y="179" width="86" height="80" rx="7" fill="#202830" stroke="#b18b5f" stroke-width="4" />
+                <path d="M405 235h67m-65 6h62" stroke="#e8e1d2" stroke-width="3" />
+                <path d="M409 178v-15h60v15" fill="#2b3038" stroke="#b18b5f" stroke-width="4" />
+              </g>
+
+              <!-- glass doors between salon and garden -->
+              <rect x="666" y="0" width="18" height="700" fill="#b2c8ce" fill-opacity=".24" stroke="#c4d4d7" stroke-opacity=".52" stroke-width="4" />
+              <path d="M752 0v700m112-700v700" stroke="#c4d4d7" stroke-opacity=".5" stroke-width="6" />
+              <path d="M684 0h316M684 430h316" stroke="#d0d9ce" stroke-opacity=".28" stroke-width="4" />
+              <path d="M693 52h286M693 408h286" stroke="#d6e5d7" stroke-opacity=".1" stroke-width="3" />
+
+              <!-- garden path, fountain, and flower beds -->
+              <path d="M687 472q123-55 313 7v221H687z" fill="#27352b" />
+              <path d="M683 515q133-42 317 8M682 572q132-36 318 9M680 631q141-28 320 12" fill="none" stroke="#a7a58a" stroke-opacity=".22" stroke-width="4" />
+              <path d="M706 700q69-98 163-131 64-24 131-21" fill="none" stroke="#b8aa8a" stroke-opacity=".55" stroke-width="34" />
+              <path d="M706 700q69-98 163-131 64-24 131-21" fill="none" stroke="#645d4b" stroke-opacity=".7" stroke-width="24" />
+              <g fill="#263c30" stroke="#6b8a69" stroke-width="4">
+                <circle cx="724" cy="142" r="46" /><circle cx="810" cy="115" r="54" />
+                <circle cx="914" cy="137" r="62" /><circle cx="975" cy="266" r="56" />
+                <circle cx="710" cy="321" r="43" /><circle cx="846" cy="320" r="50" />
+              </g>
+              <g fill="#8c7290" stroke="#ddc3d8" stroke-width="2">
+                <circle cx="740" cy="168" r="6" /><circle cx="774" cy="125" r="6" />
+                <circle cx="909" cy="164" r="7" /><circle cx="950" cy="226" r="6" />
+                <circle cx="808" cy="339" r="6" /><circle cx="715" cy="315" r="5" />
+              </g>
+              <g filter="url(#vilShadow)">
+                <ellipse cx="875" cy="462" rx="70" ry="19" fill="#8d9f9b" stroke="#d0d4c2" stroke-width="4" />
+                <path d="M823 461v-48q52-31 104 0v48" fill="#566a67" stroke="#c2cbb8" stroke-width="4" />
+                <ellipse cx="875" cy="413" rx="52" ry="13" fill="#a3b2a9" stroke="#d0d4c2" stroke-width="3" />
+                <path d="M875 410v-50m0 14q-30-23-23-37 20 2 23 25m0-4q28-30 37-15-6 22-37 27" fill="none" stroke="#b5c9b0" stroke-width="5" />
+                <rect x="900" y="530" width="72" height="42" rx="5" fill="#463a2d" stroke="#aa8a5e" stroke-width="4" />
+                <path d="M908 535v30m18-30v30m18-30v30m18-30v30" stroke="#c2a06c" stroke-width="3" />
+                <path d="M899 575v-8m75 8v-8" stroke="#d4c29b" stroke-width="5" />
+                <rect x="726" y="532" width="132" height="18" rx="5" fill="#76553b" stroke="#c5a075" stroke-width="4" />
+                <path d="M739 550v32m106-32v32m-108-2h110" stroke="#5d412f" stroke-width="6" />
+              </g>
+
+              <!-- non-graphic chalk outline beside the garden doors -->
+              <g fill="none" stroke="#e6e1d8" stroke-linecap="round" stroke-linejoin="round" opacity=".82" transform="translate(210 -55)">
+                <path d="M292 594q16-14 34-8 17-9 34 1l19 17-9 22-13-8-11 32 19 16-9 10-30-16-10-25-15 27-27 8-6-11 20-15 9-33-15 10-14-9Z" stroke-width="5" stroke-dasharray="11 7" />
+                <circle cx="310" cy="588" r="16" stroke-width="4" stroke-dasharray="7 5" />
+                <path d="m282 606-17 13m88 2 18 14" stroke-width="4" stroke-dasharray="6 6" />
+              </g>
+              <g fill="#e0c58f" font-family="Cairo, sans-serif" font-size="16" text-anchor="middle" opacity=".72">
+                <text x="321" y="442">صالة الاستقبال / Reception Salon</text>
+                <text x="840" y="388">الحديقة / Garden</text>
+                <text x="933" y="603">بوابة الخدمة / Service Gate</text>
+              </g>
             </svg>
             <canvas id="scene-dust" class="scene-dust" aria-hidden="true"></canvas>
             <div id="scene-spotlight" class="scene-spotlight" aria-hidden="true"></div>
@@ -284,6 +1076,35 @@
           <button id="btn-new-case" class="btn btn-primary" data-i18n="newCase">قضية جديدة</button>
           <button id="btn-replay-case" class="btn btn-secondary" data-i18n="replayCase">إعادة القضية</button>
         </div>
+      </main>
+    </section>
+
+    <!-- All Cases Complete Screen -->
+    <section id="screen-gameComplete" class="screen hidden">
+      <header class="screen-header game-complete-header">
+        <h2 data-i18n="gameCompleteTitle">ختام التحقيق</h2>
+        <button class="btn-lang" data-i18n="languageToggle">English</button>
+      </header>
+      <main class="screen-content game-complete-content">
+        <div class="game-complete-emblem" aria-hidden="true">★</div>
+        <h3 data-i18n="gameCompleteCongrats">أحسنت أيها المحقق!</h3>
+        <p data-i18n="gameCompleteMessage">أنهيت جميع القضايا وأثبتّ جدارتك.</p>
+        <div class="game-complete-stats">
+          <div>
+            <span data-i18n="rankLabel">الرتبة</span>
+            <strong id="game-complete-rank"></strong>
+          </div>
+          <div>
+            <span data-i18n="gameCompleteStarsLabel">مجموع أفضل النجوم</span>
+            <strong id="game-complete-stars"></strong>
+          </div>
+          <div>
+            <span data-i18n="gameCompleteCasesLabel">القضايا المكتملة</span>
+            <strong id="game-complete-cases"></strong>
+          </div>
+        </div>
+        <button id="btn-complete-replay" class="btn btn-primary" data-i18n="gameCompleteReplay">إعادة أي قضية</button>
+        <button id="btn-complete-random" class="btn btn-secondary" data-i18n="randomCase">قضية عشوائية</button>
       </main>
     </section>
 
@@ -364,25 +1185,59 @@
   </section>
 
   <button id="btn-toggle-tablet" class="tablet-toggle" data-i18n-title="tablet" data-i18n-aria-label="tablet">
-    <span class="tablet-toggle-icon">📋</span>
+    <span class="tablet-toggle-icon" aria-hidden="true">
+      <svg viewBox="0 0 42 32">
+        <rect x="2" y="1.5" width="38" height="29" rx="5" fill="#aebbc9" />
+        <rect x="5" y="4.5" width="32" height="23" rx="3" fill="#0c1e32" />
+        <rect x="7" y="6.5" width="28" height="18" rx="2" fill="#17476d" />
+        <path d="M9 19q8-11 13-4t11-5" fill="none" stroke="#64b9ec" stroke-width="2" opacity=".8" />
+        <circle cx="21" cy="27.5" r="1.1" fill="#263647" />
+      </svg>
+    </span>
     <span class="tablet-toggle-label" data-i18n="tablet">تابلت المحقق</span>
   </button>
   <div id="tablet" class="tablet">
     <div class="tablet-body">
       <div class="tablet-status">
         <span id="tablet-time">--:--</span>
+        <div class="tablet-status-indicators" aria-hidden="true">
+          <svg viewBox="0 0 30 16" class="tablet-battery">
+            <rect x="1" y="2" width="24" height="12" rx="2" />
+            <path d="M27 5v6" />
+            <rect x="4" y="5" width="17" height="6" rx="1" class="tablet-battery-charge" />
+          </svg>
+          <span>86%</span>
+        </div>
         <button id="btn-close-tablet" class="btn-close-tablet" data-i18n-title="closeTablet" data-i18n-aria-label="closeTablet">✕</button>
       </div>
       <div class="tablet-home" id="tablet-home">
         <h2 data-i18n="tablet">تابلت المحقق</h2>
         <div id="tablet-rank-card" class="detective-card detective-card-tablet hidden"></div>
         <div class="tablet-apps">
-          <button class="tablet-app" data-app="evidence" data-i18n="evidenceTitle">الأدلة المجمعة</button>
-          <button class="tablet-app" data-app="suspects" data-i18n="suspectsTitle">المشتبه فيهم</button>
-          <button class="tablet-app" data-app="notes" data-i18n="notes">ملاحظاتي</button>
-          <button class="tablet-app" data-app="lab" data-i18n="labTitle">المعمل</button>
-          <button class="tablet-app" data-app="skills" data-i18n="skillsTitle"></button>
-          <button class="tablet-app" data-app="accuse" data-i18n="accuse">اتهام</button>
+          <button class="tablet-app app-evidence" data-app="evidence">
+            <svg class="tablet-app-icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="6" width="27" height="36" rx="6" fill="#35a7ff"/><path d="M16 16h13M16 22h9" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="31" cy="31" r="8" fill="#ffd166"/><path d="m37 37 6 6" stroke="#ff9f1c" stroke-width="4" stroke-linecap="round"/></svg>
+            <span data-i18n="evidenceTitle">الأدلة المجمعة</span>
+          </button>
+          <button class="tablet-app app-suspects" data-app="suspects">
+            <svg class="tablet-app-icon" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="16" r="9" fill="#ff7a90"/><path d="M7 42c1-10 7-16 17-16s16 6 17 16" fill="#b85cf6"/><circle cx="40" cy="13" r="5" fill="#ffd166"/></svg>
+            <span data-i18n="suspectsTitle">المشتبه فيهم</span>
+          </button>
+          <button class="tablet-app app-notes" data-app="notes">
+            <svg class="tablet-app-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 6h21l8 8v28H10z" fill="#ffd166"/><path d="M31 6v9h8M16 23h17M16 29h17" fill="none" stroke="#8c6510" stroke-width="3" stroke-linecap="round"/><path d="m28 36 11-11 4 4-11 11-6 2z" fill="#ff7a59"/></svg>
+            <span data-i18n="notes">ملاحظاتي</span>
+          </button>
+          <button class="tablet-app app-lab" data-app="lab">
+            <svg class="tablet-app-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M18 5h12M21 5v14L10 38a4 4 0 0 0 4 6h20a4 4 0 0 0 4-6L27 19V5" fill="#63d6bd" stroke="#e5fff7" stroke-width="3" stroke-linejoin="round"/><path d="M15 34h18l5 7H10z" fill="#42a5f5"/><circle cx="23" cy="32" r="2" fill="#fff"/></svg>
+            <span data-i18n="labTitle">المعمل</span>
+          </button>
+          <button class="tablet-app app-skills" data-app="skills">
+            <svg class="tablet-app-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="m24 4 6 13 14 2-10 10 3 14-13-7-13 7 3-14L4 19l14-2z" fill="#f5a623"/><circle cx="24" cy="24" r="6" fill="#fff1a8"/></svg>
+            <span data-i18n="skillsTitle"></span>
+          </button>
+          <button class="tablet-app app-accuse" data-app="accuse">
+            <svg class="tablet-app-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="m28 6 14 14-7 7-14-14z" fill="#ff5d68"/><path d="m22 13 13 13-5 5-13-13zM18 22l8 8-14 14-6-6z" fill="#ffbd59"/><path d="m6 42 5-5" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+            <span data-i18n="accuse">اتهام</span>
+          </button>
         </div>
       </div>
       <div class="tablet-app-screen hidden" id="tablet-evidence">
@@ -456,6 +1311,10 @@
       </div>
     </div>
   </div>
+  <div class="police-lights" aria-hidden="true">
+    <span class="police-light police-light-blue"></span>
+    <span class="police-light police-light-red"></span>
+  </div>
 
   <script src="js/i18n.js"></script>
   <script src="js/state.js"></script>
@@ -463,6 +1322,7 @@
   <script src="data/rules.js"></script>
   <script src="data/skills.js"></script>
   <script src="data/cases.js"></script>
+  <script src="data/case-templates.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/effects.js"></script>
   <script src="js/ui.js"></script>
